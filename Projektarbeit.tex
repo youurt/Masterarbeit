@@ -1,0 +1,420 @@
+\RequirePackage[ngerman=ngerman-x-latest]{hyphsubst}
+\documentclass[
+        ngerman,
+        paper=a4,
+        numbers=noendperiod,
+]{scrreprt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+% Encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% Sprachsupport
+\usepackage[ngerman]{babel}
+\usepackage{translator}
+\usepackage{tocloft}
+% Tabellen
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{comment}
+% Symbole
+\usepackage{eurosym}
+% Formeln
+\usepackage{amsmath, amsthm, amssymb}
+% Formelregeln
+
+
+
+
+\newcommand{\listequationsname}{Formelverzeichnis}
+\newlistof{myequations}{equ}{\listequationsname}
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+\setlength{\cftmyequationsnumwidth}{3em}% Width of equation number in List of Equations
+
+
+
+
+% Pakete
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[square,sort]{natbib}
+\usepackage[hyphens]{url}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage[
+        pdftex,
+        hyperfigures,
+        hyperindex,
+        bookmarksnumbered,
+        linktoc=all,
+        pdfborder={0.25 0.25 0.25},
+        %pdfborder={0 0 0},
+        pdfpagelayout=TwoColumnRight,
+]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{lmodern}
+\usepackage[final,babel]{microtype}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage[printonlyused]{acronym}
+\usepackage{subfiles} 
+\usepackage{fancyvrb}
+\usepackage{verbatim} 
+
+\pagestyle{fancy}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\fancyhf{}
+\fancyhead[RE]{\chaptername~\thechapter}
+\fancyhead[LO]{\leftmark}
+\fancyhead[LE,RO]{\thepage}
+
+%Quellcodes
+%Farben
+\usepackage{color}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+%Listing einfaerben
+\usepackage{listings}
+
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2
+}
+\lstset{style=mystyle}
+
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+    \huge \textbf{\textsf{Clientseitiges Deep Learning durch Klassifizierung von deutschsprachigen Clickbaits}} \\
+    \vspace{1cm}
+    \LARGE\textbf{\textsc{Masterarbeit}}\\
+    \vspace{1cm}
+    \normalsize
+    vorgelegt am: \today \\
+    \vspace{2.5cm}
+    \large \textbf{Fakultät IV - 
+Institut für Wissensbasierte
+Systeme und Wissensmanagement, Universität Siegen
+}
+\linebreak
+\linebreak
+\begin{figure}[H]
+    \centering\includegraphics[width=0.4\linewidth]{imageuni.pdf}
+    \label{fig:Unilabel}
+\end{figure}
+    \end{center}
+    \vspace{3cm}
+    \begin{center}
+ \normalsize{
+    \begin{tabular}{ll}
+    	Eingereicht von: & {Ugur Tigu} \\
+    	Matrikelnummer: & {1299779} \\
+    	Studiengang: & Wirtschaftsinformatik, Master of Science (M.Sc.)\\
+	Erstprüfer: & Prof. Dr.-Ing. Madjid Fathi \\
+	Betreuer: &   Johannes Zenkert\\
+    \end{tabular}\\
+    }
+\end{center}
+\end{titlepage}
+\setcounter{page}{0}
+\pagenumbering{Roman}
+\tableofcontents
+\clearpage 
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\listoffigures
+\clearpage 
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+\listoftables
+\clearpage 
+% Kapiteldefinition ohne Nummerierung
+\chapter*{Abkürzungsverzeichnis}
+ % Abkürzungsverzeichnis soll im Inhaltsverzeichnis erscheinen
+\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis} 
+\begin{acronym}
+% Format der Abkürzungsdefinition: \acro{}[]{}
+% {Verweis}[Abkürzung]{ausgeschriebene Abkürzung}
+\acro{bert}[BERT]{Bidirectional Encoder Representations from Transformers}
+\acro{bow}[BoW]{Bag-of-Words}
+\acro{gpu}[GPU]{Graphics Processing Unit}
+\acro{lstm}[LSTM]{Long short-term memory}
+\acro{lm}[LM]{Language Model}
+\acro{mrr}[MRR]{Mean Reciprocal Rank}
+\acro{nn}[NN]{Neuronales Netz}
+\acro{nlg}[NLG]{Natural Language Generating}
+\acro{nlp}[NLP]{Natural Language Processing}
+\acro{nlu}[NLU]{Natural Language Understanding}
+\acro{pos}[POS]{Part-of-speech}
+\acro{qa}[QA]{Question Answering}
+\acro{rnn}[RNN]{Rekurrentes neuronales Netz}
+\acro{svm}[SVM]{Support Vector Machine}
+\acro{squad}[SQuAD]{Stanford Question Answering Dataset}
+\acro{tpu}[TPU]{Tensor Processing Units}
+\acro{trec}[TREC]{Text REtrieval Conference}
+
+
+
+
+\end{acronym}
+\clearpage 
+\addcontentsline{toc}{chapter}{Formelverzeichnis} 
+\listofmyequations
+\clearpage
+\addcontentsline{toc}{chapter}{Listings} 
+\lstlistoflistings
+\clearpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%3 Seiten
+\input{chapters/chapter1}
+\input{chapters/chapter2}
+\input{chapters/chapter3}
+\input{chapters/chapter4}
+\input{chapters/chapter5}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\appendix 
+\chapter{Anhang}
+\label{chapter:Anhang}%
+
+
+\section{Einrichtung der Umgebung}
+\label{section:EINR} %
+\begin{lstlisting}[language=Python]
+# Installiere & importiere Bibliotheken.
+!pip install transformers
+!pip install torch
+import torch
+
+# Importiere aus transformers das BERT Model, setzen der Instanz
+from transformers import BertForQuestionAnswering
+model = BertForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
+# Importiere aus transformers das BERT-Tokenizer, setzen der Instanz
+from transformers import BertTokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
+\end{lstlisting}
+
+\section{Definieren von Frage und Antwort}
+\label{section:FRA} %
+\begin{lstlisting}[language=Python]
+question = "What kind of questions answered LUNAR?"
+answer_text = "Two early question answering systems were BASEBALL and LUNAR. BASEBALL answered questions about the US baseball league over a period of one year. LUNAR, in turn, answered questions about the geological analysis of rocks returned by the Apollo moon missions. Both question answering systems were very effective in their chosen domains."
+
+# Anwenden des Tokenizers auf Frage und Antwort.
+input_ids = tokenizer.encode(question, answer_text)
+\end{lstlisting}
+
+
+\section{BERT Tokenizer}
+\label{section:BERTTOK} %
+\begin{lstlisting}[language=Python]
+tokens = tokenizer.convert_ids_to_tokens(input_ids)
+for token, id in zip(tokens, input_ids):
+    if id == tokenizer.sep_token_id:
+        print('')
+    print('{:<12} {:>6,}'.format(token, id))
+    if id == tokenizer.sep_token_id:
+        print('')
+\end{lstlisting}
+
+\section{BERT Tokenizer Ausgabe}
+\label{section:BERTTOK2} %
+\begin{lstlisting}
+[CLS]           101
+what          2,054
+kind          2,785
+of            1,997
+questions     3,980
+answered      4,660
+lunar        11,926
+?             1,029
+
+[SEP]           102
+
+two           2,048
+early         2,220
+question      3,160
+answering    10,739
+systems       3,001
+were          2,020
+baseball      3,598
+and           1,998
+lunar        11,926
+.             1,012
+baseball      3,598
+answered      4,660
+questions     3,980
+about         2,055
+the           1,996
+us            2,149
+baseball      3,598
+league        2,223
+over          2,058
+a             1,037
+period        2,558
+of            1,997
+one           2,028
+year          2,095
+.             1,012
+lunar        11,926
+,             1,010
+in            1,999
+turn          2,735
+,             1,010
+answered      4,660
+questions     3,980
+about         2,055
+the           1,996
+geological    9,843
+analysis      4,106
+of            1,997
+rocks         5,749
+returned      2,513
+by            2,011
+the           1,996
+apollo        9,348
+moon          4,231
+missions      6,416
+.             1,012
+both          2,119
+question      3,160
+answering    10,739
+systems       3,001
+were          2,020
+very          2,200
+effective     4,621
+in            1,999
+their         2,037
+chosen        4,217
+domains      13,100
+.             1,012
+
+[SEP]           102
+
+\end{lstlisting}
+
+
+\section{Segmentierung der Frage und des Antwortes}
+\label{section:BERTSEG} %
+\begin{lstlisting}[language=Python]
+# Durchsuchen der input_ids nach dem "[SEP]" Token.
+sep_index = input_ids.index(tokenizer.sep_token_id)
+
+# Die Anzahl der Segment-A-Token mit [SEPT]-Token.
+num_seg_a = sep_index + 1
+
+# Der Rest ist Segment B.
+num_seg_b = len(input_ids) - num_seg_a
+
+# Erstellen der Liste mit Nullen und Einsen.
+segment_ids = [0]*num_seg_a + [1]*num_seg_b
+
+# Jedes Eingabetoken hat eine segment_id.
+assert len(segment_ids) == len(input_ids)
+\end{lstlisting}
+
+
+
+
+\section{Ausführen des Models mit PyTorch}
+\label{section:ANSW} %
+\begin{lstlisting}[language=Python]
+# Eingabetext wird als Token dargestellt
+# Die Segment-IDs, zur Unterscheidung von Frage und Antworttext 
+start_scores, end_scores = model(torch.tensor([input_ids]), token_type_ids=torch.tensor([segment_ids])) \end{lstlisting}
+
+
+
+\section{Finden der Antwort mit PyTorch}
+\label{section:END} %
+\begin{lstlisting}[language=Python]
+# Finden der Token mit den hoechsten Start- und Endwerten.
+answer_start = torch.argmax(start_scores)
+answer_end = torch.argmax(end_scores)
+
+# Kombinieren der Token in als Antwort.
+answer = ' '.join(tokens[answer_start:answer_end+1])
+
+print('Antwort: "' + answer + '"') 
+# Antwort: "geological"
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+\clearpage
+        \phantomsection % damit das pdf bookmark an die richtige Stelle zeigt
+        \pdfbookmark{Literaturverzeichnis}{bibliography}
+        
+        % zeigt immer alle definierten Quellen an, auch wenn diese nicht verwendet werden
+        %\nocite{*}
+        \bibliographystyle{abbrv}
+        \addcontentsline{toc}{chapter}{Literaturverzeichnis}
+        \bibliography{literatur}
+
+
+
+
+\chapter*{Erklärung}
+Hiermit versichere ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt habe, insbesondere keine anderen als die angegebenen Informationen aus dem Internet. Diejenigen Paragraphen der für mich gültigen Prüfungsordnung, welche etwaige Betrugsversuche betreffen, habe ich zur Kenntnis genommen. Der Speicherung meiner Projekt-Arbeit zum Zweck der Plagiatsprüfung stimme ich zu. Ich versichere, dass die elektronische Version mit der gedruckten Version inhaltlich übereinstimmt.\newline
+\linebreak
+\linebreak
+\linebreak
+Bielefeld, den \today\newline
+(Ort) (Datum)\newline
+\linebreak
+\linebreak
+\linebreak
+..................................\newline
+(Unterschrift)
+\end{document}
