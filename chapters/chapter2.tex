@@ -33,11 +33,11 @@ Beispielsweise kann das Perzeptron bei drei Eingabemerkmalen  (Rot, Grün und Bl
 
 Wenn ein Modell nicht nur eine einzige lineare Schicht hat, sondern wenn mehrere Schichten in Form von Perzeptronen zusammengebracht werden, handelt es sich dabei um ein mehrschichtiges Perzeptron. Die Eingabe- und Ausgabeebene  ist von außen sichtbar, während alle anderen Ebenen in der Mitte ausgeblendet oder verborgen sind (hidden layers). Es werden mehrere lineare Funktionen (einzelne Schichten) nacheinander gestapelt und somit eine  mehrschichtiges Perzeptron erzeugt.
 
-\begin{figure}[H]
+\begin{figure}[H]\label{Kap2:Multi}
     \centering
     \includegraphics[width=8cm]{kapitel2/multilayerperc.png}
     \caption[Das mehrschichtige Perzeptron]{Das mehrschichtige Perzeptron mit zwei verborgenen Schichten, entnommen aus \cite*{Gardner1998}}
-    \label{Kap2:Multi}
+    
 \end{figure}
 
 
@@ -48,10 +48,10 @@ Neben dem Perzeptron gibt es das Sigmoid Neuron. Das Perzeptron gibt bekannt nur
 
 Genau wie ein Perzeptron hat das Sigmoid-Neuron die Eingaben $x_1, x_2, ...$, aber anstatt nur 0 oder 1 zu sein, können diese Eingänge auch beliebige Werte zwischen 0 und 1 annehmen. Also zum Beispiel 0,123 welches eine gültige Eingabe für ein Sigmoid-Neuron ist. Ebenso wie ein Perzeptron hat das Sigmoid-Neuron Gewichte für jede Eingabe, $w_1, w_2, ...$ und einen Bias, $b$. Die Ausgabe ist jedoch nicht 0 oder 1, stattdessen ist es $\sigma$, $(wx + b)$, wobei $\sigma$ als Sigmoidfunktion bezeichnet wird und durch Formel~\ref{SigmoidFu} definiert ist.
 
-\begin{equation} 
+\begin{equation} \label{SigmoidFu}
     \sigma (z) = \frac{1}{1+e^{-z}}
 \end{equation}
-\label{SigmoidFu}
+
 \myequations{Sigmoidfunktion}
 
 
@@ -84,10 +84,9 @@ Die Sigmoidfunktion wird mit der Formel~\ref{Formel2_2} definiert und in der Abb
 \subsection{Tanh}
 Die Tanh-Aktivierungsfunktion wird mit der Formel~\ref{TanhF} definiert ihre Ableitung wird in der Formel~\ref{TanhAbl} berechnet. Sie hat ihre Ausgangsänderungen im Bereich (-1, 1). Sie hat eine Struktur, die der Sigmoid-Funktion sehr ähnlich ist. Der Vorteil gegenüber der Sigmoidfunktion besteht darin, dass ihre Ableitung steiler ist, was bedeutet, dass sie mehr Werte enthalten kann (vergleiche Abbildung~\ref{Kap2:Tanh_plot}). Für die Ableitung der Tanh-Aktivierungsfunktion gilt, $e^z = \frac{d}{dz}e^z$ und $e^{-z} = \frac{d}{dz}e^{-z}$.
 
-\begin{equation} \label{Formel2_3}
+\begin{equation} \label{TanhF}
     tanh(z) = \frac{e^{z}-e^{-z}}{e^{z}-e^{-z}}
 \end{equation}
-\label{TanhF}
 \myequations{Die Tanh-Funktion}
 
 \begin{equation} \label{TanhAbl}
@@ -97,7 +96,6 @@ Die Tanh-Aktivierungsfunktion wird mit der Formel~\ref{TanhF} definiert ihre Abl
         1-\frac{\left( e^{z} -e^{-z}\right)^{2}}{\left( e^{z} +e^{-z}\right)^{2}} \ =\ 1\ -tanh^{2}( z)
     \end{array}
 \end{equation}
-\label{TanhAbl}
 \myequations{Die Ableitung der Tanh-Funktion}
 
 \begin{figure}[H]
@@ -110,22 +108,20 @@ Die Tanh-Aktivierungsfunktion wird mit der Formel~\ref{TanhF} definiert ihre Abl
 \subsection{ReLu}
 Vor kurzem wurde eine sehr einfache Funktion namens ReLU (REctified Linear Unit) sehr beliebt, da sie dazu beiträgt, einige Optimierungsprobleme die bei Sigmoiden beobachtet werden, zu lösen \cite*[11]{AntonioGuili;AmitaKapoor;SujitPal2019}. Sie wird in Formel~\ref{Relu} definiert, die zugehörige Ableitungsfunktion wird in der Formel~\ref{ReluAbl} berechnet. Wie in Abbildung~\ref{Kap2:ReLu_plot} zu sehen, ist die Funktion für negative Werte Null und wächst für positive Werte linear. Die ReLU ist relativ einfach zu implementieren.
 
-\begin{equation} 
+\begin{equation} \label{Relu}
     f( x) \ =\ \begin{cases}
         0 & wenn\ x\  <\ 0    \\
         x & wenn\ x\  \geq\ 0 \\
     \end{cases}
 \end{equation}
-\label{Relu}
 \myequations{Die ReLu-Funktion}
 
-\begin{equation} 
+\begin{equation} \label{ReluAbl}
     f'( x) \ =\ \begin{cases}
         1, & wenn\ x\  >\ 0 \\
         0, & sonst
     \end{cases}
 \end{equation}
-\label{ReluAbl}
 \myequations{Die Ableitung der ReLu-Funktion}
 
 \begin{figure}[H]
@@ -138,10 +134,9 @@ Vor kurzem wurde eine sehr einfache Funktion namens ReLU (REctified Linear Unit)
 \subsection{softmax}
 Die grundlegende Schwierigkeit bei der Durchführung kontinuierlicher Mathematik auf einem digitalen Computer besteht darin, dass unendlich viele reelle Zahlen mit einer endlichen Anzahl von Bitmustern dargestellt werden müssen. Dabei entstehen Rundungsfehler die problematisch sein können, insbesondere wenn sie sich über viele Operationen hinweg zusammensetzen. Sieführen dazu, dass theoretisch funktionierende Algorithmen in der Praxis fehlschlagen. Ein Beispiel für eine Funktion, die gegen Rundungsfehler stabilisiert, ist die softmax-Funktion \cite*[80-81]{IanGoodfellowYoshuaBengio2016}.
 
-\begin{equation} 
+\begin{equation} \label{FormelSoft}
     softmax( x)_{i} =\frac{exp( x_{i})}{\sum ^{n}_{j=1} exp( x_{j})}
 \end{equation}
-\label{FormelSoft}
 \myequations{Die softmax-Funktion}
 
 \section{Optimierungsalgorithmen}
@@ -269,6 +264,31 @@ Die meisten Deep-Learning-Algorithmen beinhalten irgendeine Art von Optimierung.
         \end{equation}
         \myequations{L1-Regularisierung}
 
+\section{Metriken im Deep Learning}
+Im Deep Learning werden oftmals Klassifizierungsprobleme gelöst. In diesem Abschnitt werden die wichtigsten Metriken für das Messen solcher Modelle definiert.
+\paragraph{Precision}
+Präzision gibt die Häufigkeit an, mit der ein Modell bei der Vorhersage der positiven Klasse korrekt war. Das ist:
+
+\begin{equation} \label{Preci}
+             Precision =  \frac{True\ Positives}{True\ Positives\ + False\ Positives}.
+        \end{equation}
+        \myequations{Precision}
+\paragraph{Recall}
+Ist eine Metrik, die die folgende Frage beantwortet: Wie viele der möglichen positiven Bezeichnungen hat das Modell korrekt identifiziert? Es wird definiert durch:
+\begin{equation} \label{Recall}
+             Recall =  \frac{True\ Positives}{True\ Positives\ + False\ Negatives}.
+        \end{equation}
+        \myequations{Recall}
+
+
+\paragraph{F1-Score}
+Der F1-Score ist das harmonische Mittel der Präzision und des Rückrufs. Es wird mit folgender Formel berechnet:
+\begin{equation} \label{F1Score}
+             F_1 =  2 \cdot \frac{Precision\ \cdot Recall}{Precision\  + Recall}.
+        \end{equation}
+        \myequations{F1-Score}
+        
+\paragraph{Support}
 
         \section{Verlustfunktion und Kreuzentropie}
         \subsection{Verlustfunktionen}
