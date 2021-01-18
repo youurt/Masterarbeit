@@ -1,20 +1,34 @@
 
-\chapter{Clickbaits und die Klassifizierung von Clickbaits}% \chapter{Checkliste}
+\chapter{Clickbaits und die Klassifizierung von Clickbaits}\label{ch4}
 
 
-\section{Einleitung}
 Clickbaits besitzen semantische und syntaktische Nuancen, auf die besonders vorgegangen werden muss. Dies geschieht in Form von analyse und vorverarbeitung der Titel. In diesem Abschnitt werden Ansätze aus der Literatur verglichen, die diese semantischen und syntaktischen Besonderheiten bearbeiten. In diesem Kapitel werden Ansätzte aus der Literatur vorgestellt, die die Aufgabe Clickbait Klassifizierung und die damit entstehenden Unteraufgaben wie das Sammeln von Daten, Einbetten der Wörter und schließlich entwickeln der Deep Learning Modelle haben.
 
 
-
 \section{Was sind Clickbaits?}
+
+
 Was sich hinter einer Schlagzeile, einem Titel verbirgt ist ohne weiteres nicht ersichtlich. Die meisten Menschen nehmen heutzutage Ihre Nachrichten über soziale Medien auf. Auf sozialen Medien werden meistens nur die Schlagzeilen gezeigt und wenn der Nutzer einen entsprechenden Eintrag interessant oder lesenswert findet, klickt er auf diesen Link. Das Wort Clickbait stammt aus den beiden Wörtern \enquote{Klick} und \enquote{Köder}, es ist also eine Falle. Viele Medienunternehmen, teilweise auch große, nutzen diese Falle um mehr Klicks zu generieren. Das Problem dabei ist es oftmals, dass die Nutzer durch die \enquote{Spannung} oder \enquote{Frage} in der Schlagzeile eine Erwartung haben, die nicht immer oder nur teilweise erfüllt wird. In der Studie von \cite*{Main} wurden ca. 1,6 Mio. Facebook-Posts untersucht und es wurde festgestellt, dass 25 bis 60\% der Fälle Clickbaits-Posts waren, je nach Medienunternehmen und Thema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{kapitel4/buzz.png}
+    \caption[Beispiele von Clickbaits]{Beispiele von Clickbaits Nachrichten im Internet}
+    \label{clckbPic}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{kapitel4/wikinews.png}
+    \caption[Beispiele von Nicht-Clickbaits]{Beispiele von Nicht-Clickbaits Nachrichten im Internet}
+    \label{clckbPic}
+\end{figure}
 
 Es gibt keine eindeutige Definition für Clickbaits. Clickbaits weisen unterschiedliche Formen. Nach \cite*{Biyani2016} sind Clickbaits, als eine Praxis um Klicks zu generieren, durch eine attraktive Überschrift, wessen Inhalt die Erwartungen nur teilweise oder gar nicht erfüllt. Clickbaits kann also eine Täuschung oder Trick der Medien betrachtet werden. Eine andere Definition \cite*{Potthasta} betrachtet das Thema Clickbait eher als Werbung für Onlineinhalte und die damit verbundene verbreitung oder viral gehen durch die sozialen Medien.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=14cm]{kapitel4/clickbaits.png}
+    \includegraphics[width=15cm]{kapitel4/clickbaits.png}
     \caption[Die Kernformen des Clickbaits]{Die 4 Kernformen des Clickbaits in Anlehnung an \cite*[71]{Hrsg2020}}
     \label{TSNE}
 \end{figure}
@@ -49,5 +63,3 @@ Die Autoren der Arbeit aus \cite*{Pujahari} Clustern zunächst die aus den Schla
     \label{TSNE}
 \end{figure}
 
-\section{Schluss}
-In diesem Kapitel wurden einige Arbeiten aus der Literatur vorgestellt, jedoch nicht alle. Es gibt außerdem noch weitere Arbeiten wie \cite*{chawda2019novel}\cite*{Zannettou2018}\cite*{Kumar}\cite*{Thomas}\cite*{Liao}\cite*{Glenski} und \cite*{Biyani2016} die unter diese Literaturstudie fallen könnten. Alle diese Arbeiten in Ihrer ganzen Fülle zu beschreiben würde den Rahmen dieser Arbeit sprengen, sodass nur ein Einblick über mögliche Aufgaben, wie das Sammeln von Daten und das Bauen eines Deep Learning Ansatzes sowie die Besonderheiten die Clickbaits Schlagzeilen haben, verschafft wurde.

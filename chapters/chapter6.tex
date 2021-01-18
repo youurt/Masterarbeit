@@ -1,0 +1,21 @@
+\chapter{Fazit und Ausblick}
+In diesem Kapitel sollen sowohl die Forschungsfragen aus dem Kapitel \ref{ch1} beantwortet werden, als auch ein möglicher Ausblick, diese Arbeit zu ergänzen oder zu erweitern festgelegt werden.
+
+%\paragraph{Wie kann NLP dafür eingesetzt werden um die Muster aus Clickbaits zu erkennen?}
+%Clickbaits haben deutliche Merkmale, wie die kurze Wortlängen und das Auftauchen von bestimmten Wörtern und stellen von Fragen. Dieses wurde mit NLP erkannt. Relativ große Mengen an Daten können somit analysiert und die wichtigsten Muster und Merkmale z.B. für das klassifizieren von diesen Texten verwendet werden.
+ 
+
+\paragraph{Wie kann ein Datensatz für deutsche Clickbaits erstellt werden?}
+Im Abschnitt~\ref{sectionAnalyse} wurden die Ergebnisse eines Datensatzes vorgestellt, welches ohne den Einsatz eines Menschen gelabelt wurden. Das Labeln wurde vollständig durch ein Programm durchgeführt (siehe Abschnitt~\ref{secLabel}). Die Daten wurden im Vorfeld speziell für ein bestimmtes Problem gesammelt wurden, also die Clickbaits aus Seiten, wo es Möglicherweise viele Clickbaits gibt  und Wikinews, als Gegenbeispiel dafür. Der Vorteil des \enquote{automatischen Labelns} liegt darin, dass es keinen menschlicher Eingriff gibt und somit weniger Zeitaufwand entsteht. Der Nachteil ist, dass die Qualität sinkt, da alleine die Konditionen, die durch Programme festgehalten werden, die bestimmend sind. Hier könnte mit mehr Aufwand ein Datensatz mit einer besseren Qualität geben. Wie im Abschnitt~\ref{evaSec} zu sehen ist, führt dieser Ansatz nicht immer zu einer richtigen Vorhersage. Das Modell denkt, bei einer Frage oft an die Klasse Clickbaits. Dieses ist rückzuschließen auf die Daten die aus Wikinews gesammelt wurden. Wikinews ist keine Plattform, welches mit Werbeeinnahmen lebt sondern mit spenden, sodass es seine Schlagzeilen nicht mit Stilmitteln gestaltet, welches unbedingt die Aufmerksamkeit der Nutzer erhalten soll. Das Modell sieht entsprechend die Eingaben mit den Augen von \enquote{Wikinews} oder \enquote{Nicht-Wikinews}. Hier sollten neben Wikinews andere Quelllen herangezogen werden, die die Klasse der Nicht-Clickbaits \enquote{harmonischer} machen, da anzunehmen ist, dass die Welt der Nachrichten nicht nur aus Wikinews und den anderen Quellen besteht.
+
+\paragraph{Können CNNs dafür eingesetzt werden, um Clickbaits zu klassifizieren?}
+Ein relativ einfach gehaltenes und kleines Modell erzielte sehr gute Ergebnisse. Das Modell kann erweitert und mit einem anderen Datensatz getestet werden. Auch das experimentieren mit anderen Netzwerkarten wie RNNs oder LSTMs sollte berücksichtigt werden.
+
+
+\paragraph{Wie können Deep Learning Modelle in eine Web-Anwendung eingebettet werden?}
+
+Mit der steigenden Digitalisierung werden immer mehr Deep Learning Ansätze den breiten Massen zugänglich. Der größte Teil der Menschen benutzt dabei den Browser als Zugang zu diesen Modellen und Lösungen. Es kann ein Server eingerichtet werden, welches dem Clienten das Modell anbietet. Durch clientseitiges Deep Learning entstehen neue Möglichkeiten. Wie einfach ist es also statt der herkömmlichen Art, eine Deep Learning Web-Anwendung ohne einen Server zu erstellen? Diese Frage ist mit der implentierung des Modells für das Web beantwortet wurden. Das Modell wurde mit Python entwickelt und in ein Webformat umgewandelt. Es darf nicht vergessen werden, dass beide Versionen den selben Input bekommen müssen, damit diese vergleichbar funktionieren. Die Tokens müssen also auf die selbe Art und Weise bearbeitet und umgewandelt werden. In Zukunft könnte eine mobile Version des Modells erstellt werden, da JavaScript auch auf mobilen Endgeräten arbeiten kann. 
+
+
+
+

@@ -1,6 +1,8 @@
-\chapter{Deep Learning}
+\chapter{Deep Learning} \label{ch2}
 \section{Einleitung}
 Künstliche neuronale Netze stellen eine Klasse von Modellen des maschinellen Lernens dar, die vom Zentralnervensystem von Säugetieren inspiriert sind. Jedes Netz besteht aus mehreren miteinander verbundenen \enquote{Neuronen}, die in \enquote{Schichten} organisiert sind. Neuronen in einer Schicht leiten Nachrichten an Neuronen in der nächsten Schicht weiter. Erste Studien wurden in den frühen 50er Jahren mit der Einführung des \enquote{Perzeptrons} \cite{Rosenblatt} begonnen, eines zweischichtigen Netzwerks, das für einfache Operationen verwendet wird, und in den späten 60er Jahren mit der Einführung des \enquote{Back-Propagation-Algorithmus} (effizientes mehrschichtiges Netzwerktraining) (gemäß \cite{Werbos1990}, \cite{Hinton}) weiter ausgebaut.
+
+
 
 Deep Learning ermöglicht es Computermodellen, die aus mehreren Verarbeitungsebenen bestehen, Darstellungen von Daten mit mehreren Abstraktionsebenen zu erlernen. Diese Verfahren haben den Stand der Technik in Bezug auf Spracherkennung, visuelle Objekterkennung, Objekterkennung und viele andere Bereiche wie die Genomik dramatisch verbessert. Deep Learning entdeckt komplexe Strukturen in großen Datenmengen, indem es den Backpropagation-Algorithmus verwendet. Dieses ist ein Verfahren, welches der Maschine zeigt, wie sie ihre internen Parameter ändern soll, mit denen die Darstellung in jeder Schicht aus der Darstellung in der vorherigen Schicht berechnet wird. Tiefe Faltungsnetze haben Durchbrüche bei der Verarbeitung von Bildern, Video, Sprache und Audio gebracht, während wiederkehrende Netze sequentielle Daten wie Text und Sprache beleuchtet haben \cite*{Lecun2015}.
 
@@ -12,17 +14,16 @@ Die häufigste Form des maschinellen Lernens, ob tief oder nicht, ist das überw
 
 
 \section{Das Perzeptron}
-Das Perzeptron ist ein einfacher Algorithmus mit einem Eingabevektor $x$ mit $m$ Werten $(x_2, ..., x_m)$. Es wird oft als \enquote{Eingabe-Features} oder einfach als \enquote{Features} bezeichnet. Es gibt entweder eine $1$ \enquote{Ja} oder eine $0$ \enquote{Nein} zurück (siehe Formel~\ref{Formel2_1}). Dabei ist $w$ ein Vektor welches das Gewicht darstellt, und $wx$ das Punktprodukt aus $\begin{array}{l}
+Das Perzeptron ist ein einfacher Algorithmus mit einem Eingabevektor $x$ mit $m$ Werten $(x_2, ..., x_m)$. Es wird oft als \enquote{Eingabe-Features} oder einfach als \enquote{Features} bezeichnet. Es gibt entweder eine $1$ \enquote{Ja} oder eine $0$ \enquote{Nein} zurück (siehe Formel~\ref{Perzeptron}). Dabei ist $w$ ein Vektor welches das Gewicht darstellt, und $wx$ das Punktprodukt aus $\begin{array}{l}
         {\textstyle \sum ^{m}_{j=1}} w_{j} x_{j} \\
     \end{array}$, $b$ ist der Bias. Aus $wx + b$ ist die Grenzhyperebene definiert, die die Position gemäß den $w$ und $b$ zugewiesenen Werten ändert.
 
-\begin{equation}
+\begin{equation}\label{Perzeptron}
     fx=\begin{cases}
         1 & wx+b >0   \\
         0 & ansonsten
     \end{cases}
 \end{equation}
-\label{Perzeptron}
 \myequations{Funktion des Perzeptron}
 
 Beispielsweise kann das Perzeptron bei drei Eingabemerkmalen  (Rot, Grün und Blau) unterscheiden, ob die Farbe weiß ist oder nicht. Es soll beachtet werden, dass das Perzeptron keine \enquote{Vielleicht}-Antwort ausdrücken kann. Es kann mit \enquote{Ja} (1) oder \enquote{Nein} (0) antworten. Das Perzeptron-Modell kann dafür verwendet werden, indem durch Anpassung von $w$ und $b$, das Modell trainiert wird.
@@ -44,6 +45,13 @@ Wenn ein Modell nicht nur eine einzige lineare Schicht hat, sondern wenn mehrere
 \section{Sigmoid-Neuron}
 
 Neben dem Perzeptron gibt es das Sigmoid Neuron. Das Perzeptron gibt bekannt nur eine 0 oder eine 1 zurück. Es ist also eine Funktion nötig, die sich ohne ohne Diskontinuität schrittweise von 0 auf 1 ändert. Mathematisch bedeutet dies, dass eine stetige Funktion nötig ist, mit der die Ableitung berechnet werden kann. Dieses Problem kann überwunden werden, indem einen neuer Typ eines künstlichen Neurons eingeführt wird, der als \textbf{Sigmoid-Neuron} bezeichnet wird. Sigmoid Neuronen ähneln Perzeptronen, sind jedoch so modifiziert, dass kleine Änderungen ihres Gewichts und ihres Bias nur eine geringe Änderung ihrer Leistung bewirken. Dies ist der Grund dafür, dass Netzwerke lernen können \cite*[8]{Nielsen2015}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=11cm]{kapitel2/neuron.png}
+    \caption[Eine neuronale Einheit]{Eine neuronale Einheit, die 3 Eingänge \textit{x1}, \textit{x2} und \textit{x3} (und eine Bias \textit{b}) einnimmt und einen Ausgang \textit{y} erzeugt. Durch Summieren entsteht \textit{z}. Das Sigmoid nimmt \textit{z} ein und erzeugt \textit{a}. In diesem Fall ist die Ausgabe \textit{y} dieselbe wie \textit{a}, aber in tiefen Netzwerken wird \textit{y} vorbehalten, um die endgültige Ausgabe des gesamten Netzwerks zu berechnen. Entnommen aus \cite[125]{Jurafskya}}
+    \label{neurch2}
+\end{figure}
 
 
 Genau wie ein Perzeptron hat das Sigmoid-Neuron die Eingaben $x_1, x_2, ...$, aber anstatt nur 0 oder 1 zu sein, können diese Eingänge auch beliebige Werte zwischen 0 und 1 annehmen. Also zum Beispiel 0,123 welches eine gültige Eingabe für ein Sigmoid-Neuron ist. Ebenso wie ein Perzeptron hat das Sigmoid-Neuron Gewichte für jede Eingabe, $w_1, w_2, ...$ und einen Bias, $b$. Die Ausgabe ist jedoch nicht 0 oder 1, stattdessen ist es $\sigma$, $(wx + b)$, wobei $\sigma$ als Sigmoidfunktion bezeichnet wird und durch Formel~\ref{SigmoidFu} definiert ist.
@@ -205,7 +213,7 @@ Die meisten Deep-Learning-Algorithmen beinhalten irgendeine Art von Optimierung.
         Die Backpropagation-Gleichung wird wiederholt angewendet. Der Rückwärtsdurchlauf bezieht sich auf die Idee, die Differenz zwischen Vorhersage- und Istwerten zu verwenden, um die Hyperparameter der verwendeten Methode anzupassen. Für die Anwendung ist jedoch immer eine vorherige Vorwärtspropagation erforderlich.
 
 
-        \section{Lernrate im Deep Learning}
+        \section{Lernrate im Deep Learning}\label{learnsection}
         Die \textbf{Lernrate} beeinflusst den Betrag, um den die Parameter während der Optimierung angepasst werden, um den Fehler des neuronalen Netzwerks zu minimieren. Es ist ein Koeffizient, der die Größe der Schritte (Aktualisierungen) skaliert, die ein neuronales Netzwerk auf seinen Parameter (Vektor $x$) ausführt, wenn es den Verlustfunktionsraum durchquert. Ein großer Lernratenkoeffizient (z. B. 1) lässt die Parameter Sprünge machen, und kleine (z. B. 0,00001) lassen ihn langsam voranschreiten. Im Gegensatz dazu sollten kleine Lernraten letztendlich zu einem Fehlerminimum führen (es kann eher ein lokales als ein globales Minimum sein). Sehr kleine Lernraten können sehr lange dauern und die Belastung eines bereits rechenintensiven Prozesses erhöhen  \cite*[77]{Patterson2019}.
 
 
@@ -216,7 +224,7 @@ Die meisten Deep-Learning-Algorithmen beinhalten irgendeine Art von Optimierung.
             \label{Kap2:Lern}
         \end{figure}
 
-        \section{Unteranpassung und Überanpassung}
+        \section{Unteranpassung und Überanpassung}\label{overundersec}
         Optimierungsalgorithmen versuchen zunächst, das Problem der \textbf{Unteranpassung} \enquote{Underfitting} zu lösen. Das heißt, eine Linie zu nehmen, die sich den Daten nicht gut annähert, und sie besser an die Daten heranzuführen. Eine gerade Linie, die über ein gekrümmtes Streudiagramm schneidet, wäre ein gutes Beispiel für eine Unteranpassung, wie in Abbildung~\ref{Kap2:OverUnder} dargestellt. Wenn die Linie zu gut zu den Daten passt, haben wir das gegenteilige Problem, welches als \textbf{Überanpassung} \enquote{Overfitting} bezeichnet wird \cite*[27]{Patterson2019}.
 
         \begin{figure}[H]
@@ -226,7 +234,7 @@ Die meisten Deep-Learning-Algorithmen beinhalten irgendeine Art von Optimierung.
             \label{Kap2:OverUnder}
         \end{figure}
 
-        \section{Regularisierung}
+        \section{Regularisierung}\label{regSec}
         Die Regularisierung lässt die Auswirkungen von außer Kontrolle geratenen Parametern minimieren, indem verschiedene Methoden oder Strategien verwendet werden, um die Parametergröße im Laufe der Zeit zu minimieren. Der Hauptzweck der Regularisierung besteht darin, die Überanpassung zu kontrollieren \cite*[79]{Patterson2019}.
 
         Ein zentrales Problem beim maschinellen Lernen besteht darin, einen Algorithmus zu erstellen, der nicht nur bei den Trainingsdaten, sondern auch bei neuen Eingaben eine gute Leistung erbringt. Viele beim maschinellen Lernen verwendete Strategien sind explizit darauf ausgelegt, den Testfehler zu reduzieren, möglicherweise auf Kosten eines erhöhten Trainingsfehlers. Diese Strategien werden zusammen als Regularisierung bezeichnet. Tatsächlich war die Entwicklung effektiverer Regularisierungsstrategien eine der wichtigsten Forschungsanstrengungen auf diesem Gebiet. Regularisierung kann schließlich definiert werden als \enquote{jede Änderung, die wir an einem Lernalgorithmus vornehmen, um dessen Generalisierungsfehler, aber nicht seinen Trainingsfehler zu reduzieren} \cite*[228]{IanGoodfellowYoshuaBengio2016}.
@@ -288,7 +296,6 @@ Der F1-Score ist das harmonische Mittel der Präzision und des Rückrufs. Es wir
         \end{equation}
         \myequations{F1-Score}
         
-\paragraph{Support}
 
         \section{Verlustfunktion und Kreuzentropie}
         \subsection{Verlustfunktionen}
@@ -380,7 +387,7 @@ Der F1-Score ist das harmonische Mittel der Präzision und des Rückrufs. Es wir
         \label{Kap2:Conv}
     \end{figure}
 
-    \subsubsection{Padding}
+    \subsection{Padding}
     Die Faltungsoperation verringert die Größe der $(q + 1)$-ten Schicht im Vergleich zur Größe der $q$-ten Schicht. Diese Art der Größenreduzierung ist im Allgemeinen nicht wünschenswert, da sie dazu neigt, einige Informationen entlang der Bildränder zu verlieren. Dieses Problem kann durch \textbf{Auffüllen} (padding) gelöst werden. Beim Auffüllen werden neue Werte rund um die Ränder der Feature-Map hinzugefügt. Der Wert jedes dieser aufgefüllten Feature-Werte wird auf 0 gesetzt, unabhängig davon, ob die Eingabe oder die ausgeblendeten Ebenen aufgefüllt werden. Diese Bereiche tragen nicht zum endgültigen Punktprodukt bei, da ihre Werte auf 0 gesetzt sind. Ein Teil des Filters aus den Rändern der Schicht wird \enquote{herausragt} und dann durch das Durchführen des Punktprodukts nur über den Teil der Ebene, in dem die Werte definiert sind ersetzt \cite*[323]{Aggarwal2018}.
 
 
@@ -397,4 +404,5 @@ Es ist üblich, regelmäßig eine \textbf{Pooling Ebene} zwischen aufeinanderfol
 
 \subsection{Vollständig verbundene Ebenen}
 Am Ende wird die sogenannte \textbf{vollständig verbundene Ebenen} des Netzwerkes verwendet, um Klassenwerte zu berechnen, die als Ausgabe des Netzwerks dienen sollen. In einem traditionellen vorwärtsgerichteten Neuronalen Netzwerk wird jedes Eingangsneuron mit jedem Ausgangsneuron in der nächsten Schicht verbunden. Dies wird auch als vollständig verbundene Schicht bezeichnet. Der einzige Unterschied zwischen der vollständig verbundene Ebene und Faltungsschichten besteht darin, dass die Neuronen in der Faltungsschicht nur mit einer lokalen Region der Eingabe verbunden ist. Die Neuronen in beiden Schichten berechnen jedoch immer noch Punktprodukte, sodass ihre funktionale Form identisch ist. Zwischen beiden Schichten ist eine Konvertierung möglich \cite*{StanfordUniversityCoursecs231n2018a}.
+
 

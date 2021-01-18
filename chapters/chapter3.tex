@@ -1,15 +1,10 @@
-\chapter{Die Natürliche Sprache}
+\chapter{Die Natürliche Sprache}\label{ch3}
 
 
 Die \textbf{Verarbeitung natürlicher Sprache} (NLP) ist ein theoretisch motivierter Bereich von Computertechniken, zum Analysieren und Darstellen natürlich vorkommender Texte auf einer oder mehreren Ebenen der Sprachanalyse, um eine menschenähnliche Sprachverarbeitung für eine Reihe von Aufgaben oder Anwendungen zu erreichen \cite*{Liddy}.
 
 Der Umgang mit Textdaten ist problematisch, da unsere Computer, Skripte und Modelle für maschinelles Lernen, keinen Text im menschlichen Sinne lesen und verstehen können. Wörter können viele verschiedene Assoziationen aufrufen, diese sprachlichen Assoziationen sind das Ergebnis recht komplexer neurologischer Berechnungen. ML-Modelle sind haben dieses vorgefertigte Verständnis der Wortbedeutung nicht.
 
-
-% regular expressions
-% tokenize
-% part of speech tagging
-% ngrams
 
 \section{Tokenisieren und Extrahieren durch Reguläre Ausdrücke}
 Das Segmentieren eines Textes in seine Einheiten ist die erste Voraussetzung für dessen Weiterverarbeitung. In der Informatik können einzelne Wörter bzw. Tokens durch Leerzeichen voneinander abgetrennt werden.
@@ -60,9 +55,14 @@ Part-of-Speech Tagging ist der Prozess des Zuweisens einer Tags zu jedem Wort in
 
 
 
-\section{Wie können Deep Learning Modelle die Natürliche Sprache lernen?}
+\section{One-Hot-Encoding}
+
 
 Die verborgenen Schichten eines mehrschichtigen neuronalen Netzwerks lernen, die Eingaben des Netzwerks so darzustellen, dass die Zielausgaben leicht vorhergesagt werden können. Dies wird gut demonstriert, indem ein mehrschichtiges neuronales Netzwerk trainiert wird, um das nächste Wort in einer Sequenz aus einem lokalen Kontext früherer Wörter vorherzusagen \cite*{Bengio2003}. Jedes Wort im Kontext wird dem Netzwerk als Eins-aus-N-Vektor dargestellt, dh eine Komponente hat den Wert 1 und der Rest ist 0, dieses Verfahren wird auch als \textit{One-Hot-Encoding} bezeichnet. In einem \textit{Sprachmodell} lernen die anderen Schichten des Netzwerks, die Eingangswortvektoren in einen Ausgangswortvektor für das vorhergesagte nächste Wort umzuwandeln, welches verwendet werden kann, um die Wahrscheinlichkeit vorherzusagen, dass ein Wort im Vokabular als nächstes erscheinen wird \cite*{Lecun2015}. Das Netzwerk lernt \textbf{Wortvektoren}, die viele aktive Komponenten enthalten, von denen jede als separates Merkmal des Wortes interpretiert werden kann. Dieses Vorgehen wurde erstmals im Zusammenhang mit dem Lernen verteilter Darstellungen für Symbole demonstriert \cite*{Rumelhart1986}. Die semantischen Merkmale waren in der Eingabe nicht explizit vorhanden. Das Lernverfahren wurde als eine gute Möglichkeit entdeckt, die strukturierten Beziehungen zwischen den Eingabe- und Ausgabesymbolen in mehrere \enquote{Mikroregeln} zu zerlegen. Das Lernen von Wortvektoren hat sich auch als sehr gut erwiesen, wenn die Wortsequenzen aus einem großen Korpus von echtem Text stammen und die einzelnen Mikroregeln unzuverlässig sind \cite*{Bengio2003}.
+
+Ein spärlicher Vektor, in dem:
+Das One-Hot-Encoding ist also ein \enquote{spärlicher Vektor} in dem ein Element auf 1 gesetzt wird und alle anderen Elemente auf 0 gesetzt werden. One-Hot-Codierung wird üblicherweise verwendet, um Zeichenfolgen oder Bezeichner mit einer endlichen Menge möglicher Werte darzustellen. 
+
 
 
 \begin{figure}[H]
@@ -75,8 +75,55 @@ Die verborgenen Schichten eines mehrschichtigen neuronalen Netzwerks lernen, die
 Die numerischen Werte sollten so viel wie möglich von der sprachlichen Bedeutung eines Wortes erfassen. Eine gut ausgewählte, informative Eingabedarstellung kann einen massiven Einfluss auf die Gesamtleistung des Modells haben. \textbf{Worteinbettungen} sind der vorherrschende Ansatz für dieses Problem und so weit verbreitet, dass ihre Verwendung praktisch in jedem NLP-Projekt angenommen wird. Unabhängig davon, ob Sie ein Projekt in den Bereichen Textklassifizierung, Sentimentanalyse oder maschinelle Übersetzung starten \cite*{Lecun2015}.
 
 
+
 \section{Worteinbettungen}
 Vektoren zur Darstellung von Wörtern werden im Allgemeinen als Einbettungen bezeichnet, da das Wort in einen bestimmten Vektorraum eingebettet wird \cite*[99]{Jurafskya}.
+
+Typischerweise ist eine Einbettung eine Übersetzung eines hochdimensionalen Vektors in einen niedrigdimensionalen Raum. 
+
+Beispielsweise kann ein Satz als \enquote{spärlicher Verktor} mit Millionen Elementen (hochdimensional) dargestellt werden. Jede Zelle im Vekotor repräsentiert ein seperates Wort. Der Wer in einer Zelle gibt an, wie oft dieses Wort in einem Satz vorkommt. Da ein ein einzelner Satz wahrscheinlich nicht mehr als 50 Wörter hat, enthält fas jede Zelle eine 0. Die wenigen Zellen, die nicht 0 sind, enthalten eine kleine Zahl, welches die Häufigkeit des Auftretens dieses Wortes darstellt.
+
+Als \enquote{dichter Vektor} mit mehreren hundert Elementen (niedrigdimensional), wird der Satz dargestellt, in dem jedes Element ein Gleitkommawert zwischen 0 und 1 enthält. Dies ist also die Einbettung, diese Werte können trainiert werden und sagen mehr aus als die \enquote{spärlichen Vektoren}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{kapitel3/embd.png}
+    \caption[Darstellung der Worteinbettungen]{Jede Zeile der Einbettungsmatrix entspricht einem Wort im Vokabular, und jede Spalte ist eine Einbettungsdimension. Die Werte der Elemente der Einbettungsmatrix, die im Diagramm als Graustufen dargestellt sind, werden zufällig ausgewählt und trainiert. Entnommen aus \cite[311]{cai2020deep}}
+    \label{wordembgrau}
+\end{figure}
+
+\begin{table}[h]
+    \caption{Vergleich des One-Hot-Encodings mit Worteinbettungen  \cite[312]{cai2020deep}}
+    \label{componeembd}
+    \renewcommand{\arraystretch}{1.2}
+    \centering
+    \sffamily
+    \begin{footnotesize}
+        \begin{tabular}{l l l }
+            \toprule
+                           & \textbf{Worteinbettungen} & \textbf{One-Hot-Encoding} & \textbf{}\\
+        
+            \textbf{Hard-coded?} & hard-coded & gelernt: Die Einbettungsmatrix ist ein                  \\
+            & & trainierbarer Gewichtsparameter. Die Werte   \\
+            & & spiegeln die semantische Struktur    \\
+            & & des Wortschatzes nach dem Training wider. \\
+            \textbf{Dichte}  & spärlich, die meisten Elemente                  & dicht, Elemente nehmen ständig              \\
+            & sind Null, einige Eins. & wechselnde Werte an \\ 
+            \textbf{Skalierbarkeit}  & nicht skalierbar,                 & skalierbar. Die Einbettungsgröße             \\
+            & Die Größe des Vektors ist proportional  & muss nicht mit der Anzahl \\ 
+            & zur Größe des Vokabulars. &  der Wörter im Vokabular zunehmen. \\
+            \bottomrule
+        \end{tabular}
+    \end{footnotesize}
+    \rmfamily
+\end{table}
+
+
+
+
+\section{Word2Vec}
+\textbf{Word2Vec} \cite*{Mikolov2013} Worteinbettungen sind Vektordarstellungen von Wörtern, die normalerweise von einem Modell gelernt werden, wenn große Textmengen als Eingabe eingegeben werden (z. B. Wikipedia, Wissenschaft, Nachrichten, Artikel usw.). Diese Darstellung von Wörtern erfasst die semantische Ähnlichkeit zwischen Wörtern unter anderen Eigenschaften. Word2Vec-Worteinbettungen werden so gelernt, dass der Abstand zwischen Vektoren für Wörter mit enger Bedeutung (z. B. \enquote{König} und \enquote{Königin}) näher ist als der Abstand für Wörter mit völlig unterschiedlichen Bedeutungen (z. B. \enquote{König} und \enquote{Katze}).
+
+Bei der \textit{One-Hot-Codierung} sind die Wörter \enquote{gut} und \enquote{großartig}  genauso unterschiedlich wie \enquote{Tag} und \enquote{Nacht}. Hier kommt die Idee, verteilte Darstellungen zu erzeugen. Intuitiv wird eine gewisse Abhängigkeit eines Wortes von den anderen Wörtern eingeführt. Die Wörter im Kontext dieses Wortes würden einen größeren Anteil dieser Abhängigkeit erhalten. In der One-Hot Darstellung dagegen, sind alle Wörter unabhängig voneinander.
 
 \begin{figure}[H]
     \centering
@@ -84,11 +131,6 @@ Vektoren zur Darstellung von Wörtern werden im Allgemeinen als Einbettungen bez
     \caption[Worteinbettungen erzeugen Analogien zwischen Wörtern]{Durch Worteinbettungen können interessante Analogien zwischen einzelnen Wörtern gefunden werden. (Entnommen aus \cite*{wordemdgood})}
     \label{Word2Vex}
 \end{figure}
-
-
-\textbf{Word2Vec} \cite*{Mikolov2013} Worteinbettungen sind Vektordarstellungen von Wörtern, die normalerweise von einem Modell gelernt werden, wenn große Textmengen als Eingabe eingegeben werden (z. B. Wikipedia, Wissenschaft, Nachrichten, Artikel usw.). Diese Darstellung von Wörtern erfasst die semantische Ähnlichkeit zwischen Wörtern unter anderen Eigenschaften. Word2Vec-Worteinbettungen werden so gelernt, dass der Abstand zwischen Vektoren für Wörter mit enger Bedeutung (z. B. \enquote{König} und \enquote{Königin}) näher ist als der Abstand für Wörter mit völlig unterschiedlichen Bedeutungen (z. B. \enquote{König} und \enquote{Katze}).
-
-Bei der \textit{One-Hot-Codierung} sind die Wörter \enquote{gut} und \enquote{großartig}  genauso unterschiedlich wie \enquote{Tag} und \enquote{Nacht}. Hier kommt die Idee, verteilte Darstellungen zu erzeugen. Intuitiv wird eine gewisse Abhängigkeit eines Wortes von den anderen Wörtern eingeführt. Die Wörter im Kontext dieses Wortes würden einen größeren Anteil dieser Abhängigkeit erhalten. In der One-Hot Darstellung dagegen, sind alle Wörter unabhängig voneinander.
 
 
 
@@ -148,4 +190,14 @@ In der Vision \enquote{gleiten} die Filter über lokale \enquote{pathces} eines 
     \includegraphics[width=9cm]{kapitel2/cnnnlp.png}
     \caption[CNN in der Textverarbeitung]{Illustration einer CNN-Architektur zur Satzklassifizierung. Es sind drei Filterbereichsgrößen vorhanden: 2, 3 und 4. Filter führen Faltungen in der Satzmatrix durch und generieren Feature-Maps (mit variabler Länge). Über jede Karte wird ein 1-Max-Pooling durchgeführt, d. H. die größte Anzahl von jeder Merkmalskarte wird aufgezeichnet. Somit wird aus allen sechs Karten ein univariater Merkmalsvektor erzeugt, und diese sechs Merkmale werden verkettet, um einen Merkmalsvektor für die vorletzte Schicht zu bilden. Die letzte Softmax-Schicht empfängt dann diesen Merkmalsvektor als Eingabe und verwendet ihn zur Klassifizierung des Satzes an. Hier wird eineeine binäre Klassifikation angewendet und es gibt daher zwei mögliche Ausgangszustände dar \cite*{Zhang}.}
     \label{Kap2:Pooling}
+\end{figure}
+
+Eindimensionale CNNs können für Sequenzen wie Sätze verwendet werden. Der 1D-CNN-Algorithmus beinhaltet das Gleiten eines Kernels, wo die Gleitbewegung in eine Dimension erfolgt. An jeder Gleitposition wird eine Schicht des Eingangstensors extrahiert \cite[312-313]{cai2020deep}. Angenommen ein Satz bestehe aus 9 Wörtern. Jedes Wort wird als Vektor dargestellt. Wenn ein Filter der Größe 2 vorhanden ist, gleitet dieser 8 Positionen nach unten, dieses ist der \texttt{kernel-size}. Im nächsten Schritt geschieht eine Punktproduktoperation zwischen der Eingabe und dem Kernel. Dieses ist ein linearer Prozess und wird bis zum Ende wiederholt. Statt wie bei 2-Dimensionalen CNNs geschieht die Faltung linear nach unten. 
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{kapitel3/1dcn.png}
+    \caption[1-Dimensionale CNN]{Darstellung der Faltungsoperation beim 1D-CNN. Entnommen aus \cite[313]{cai2020deep}}
+    \label{1dcnn}
 \end{figure}

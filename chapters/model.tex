@@ -1,280 +1,5 @@
-\chapter{Implementierung}\label{ch5}
-\section{Konzeption und Methodik}
-
-
-Das Konzept dieser Arbeit ist auf 3 Säulen aufgebaut. Erstens, das Sammeln, Speichern und Analyse der Daten und die Analyse der Daten, zweitens, das Entwickeln eines Deep Learning Modells, welches durch die gesammelten und angepassten Daten entsteht und drittens, das Implementieren und Einbetten des Modells in eine Benutzeroberfläsche, also in die Clientseite, siehe Abbildung~\ref{Kap5:Konzeption}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=15cm]{kapitel5/main_p.png}
-    \caption[Darstellung der Konzeption]{Darstellung der Konzeption}
-    \label{Kap5:Konzeption}
-\end{figure}
-
-
-Deep Learning Modelle benötigen eine große Menge an Beispielen um zu lernen. Es reicht außerdem nicht aus, nur eine große Menge an Daten zu beschaffen, sondern auch gute Daten auszuwählen. In der Studie von \cite*{Chakrabortya} haben die Autoren Daten aus dem Web geladen. Für die erste Kategorie, der Nicht-Clickbaits, wurde die Wikipedia-News-API verwendet. Um genug Beispiele für Clickbaits zu finden, sollten solche Medien herausgefunden werden. Um die Daten labeln zu können ist neben dem Titel eines Datenelementes auch die extraktion der Nachricht zu erfassen.
-
-Die Wikipedia-News-API bietet einen Kostenlosen Endpunkt an, welches verschiedene Nachrichtenportale wie z.B. Politik, Wirtschaft, Kultur, Sport und Wissenschaft anbietet. Um Clickbaits zu finden verläuft die Datenaquise wesentlich schwieriger. Der Datensatz von \cite*{Chakrabortya} beinhalter jeweils 7500 Nachrichten je Kategorie. Es ist zu berücksichtigen, dass diese nicht mit Deep Learning Modellen arbeiten, sondern mit klassischen Machine Learning Algorithmen, die weniger Daten benötigen. Es müssen also mehr Daten her, also die Suche sollte neben den klassischen Clickbait-Seiten auch woanders erfolgen. Um die Datenextraktion zu automatisieren bietet sich die Software \enquote{Scrapy} an. Scrapy ist ein Open-Source Tool, welches das extrahieren von großen Mengen an Daten erleichtert. Es ist in Python geschrieben und kann durch seine Middleware Funktion auch die Daten direkt in eine SQL-Datenbank speichern.
-
-Der mittlere Kern der Pyramide in Abbildung~\ref{Kap5:Konzeption} ist das Deep Learning Modell, welches als Inferenzmaschine betrachtet werden kann. Es wird durch Eingabe von gelabelten Daten trainiert und in ein entsprechendes Format gebracht. Es gibt mehrere Anbieter für das Deep Learning. Die meisten von Ihnen sind Open Source. Die bekanntesten Bibliotheken für das Deep Learning sind TensorFlow (welches von Google unterstützt wird) und PyTorch (welches von Facebook unterstützt wird). Seit März 2018 bietet TensorFlow die Möglichkeit, Modelle in der Programmiersprache JavaScript zu trainieren und zu benutzen. Ein klassischer Vorgang um Deep Learning Modelle dem Endbenutzer durch Webprogrammierung anzubieten war es immer, dass zunächst ein Modell trainiert wurde und dann auf einem Server geladen wurde. Der Server hatte dann einen Endpunkt, z.B. eine POST-Anfrage, welches eine Anfrage vom Clienten empfang. Diese Anfrage wurde dann im Server durch das Modell beantwortet und der Server sendete dem Clienten das Ergebnis. Durch TensorFlow.js ist es möglich erstens ein Modell komplett auf der Programmiersprache JavaScript zu entwickeln und zweitens es die Inferenzbildung durch einen Server in der Mitte nicht mehr nötig. Das Modell kann zusammen mit dem Framework in den Browser geladen werden und die bearbeitung erfolgt dort. In dieser Arbeit wurde das Modell nicht mit TensorFlow.js trainiert, da es auch möglich ist, Modelle in der konventionellen Weise mit der Keras API zu trainieren und dann in ein Webfreundliches Format umzuwandeln. Nach der Konversion können die Gewichte welches das Modell gerechnet hat und eine JSON-Datei, welches das Modell beschreibt hochgeladen und benutzt werden. Der Client muss nur noch diese Dateien in den Browser laden und kann dann selbst die Anfrage beantworten. Das trainieren auf konventionellen Wegen bietet außerdem den Vorteil, dass die Umgebung auf JavaScript nicht mit der Umgebung in Python konkurrieren kann. Die meisten Tools und Frameworks werden für Python geschrieben. Ein weiterer Grund ist, dass die bearbeitung auf dem heimischen Computer sehr langsam ist. Mit Google Colab können Deep Learning Modelle mit viel Rechnerkapazität trainiert werden.
-
-Die Spitze der Pyramide macht die Benutzeroberfläsche aus. Diese wird komplett in JavaScript geschrieben. JavaScript ist die meistbenutze Programmiersprache und wird heute neben Webentwicklung auch auf dem Server verwendet. Mit TensorFlow.js ist es nun auch möglich, mit Tensors umzugehen. Die Schwierigkeit hier ist es, den Text, den der Benutzer eingibt, in Token und dann diese Token in Vektoren umzuwandeln, wenn das Modell keinen sogenannten \enquote{Input-Layer} hat welches einfache String einnehmen kann und diese umwandeln kann, dieses macht das Modell aber viel größer, da es eine größere Anzahl an Parametern hat und nicht Ziel dieser Arbeit. Eine andere Möglichkeit ist es, das gesamte Vokabular in einer JSON-Datei zu speichern und es der Benutzeroberfläsche zugänglich zu machen. Jedes auftauchende Wort im Vokabular bekommt einen Index, welches dann als \enquote{Übersetzer} dient und zur Umwandlung der Strings in Vektoren verwendet werden.
-
-
-
-
-\section{Erstellung des Datensatzes}
-\subsection{Datenbeschaffung durch Web Scraping}
-
-Um einen Forschungsbeitrag zu leisten, hat diese Arbeit das Ziel ein Clickbait Corpus auf deutscher Sprache zu erstellen. Für die Erstellung eines solchen Korpus sind zunächst bestimmte Seiten einzugrenzen, die Clickbait Nachrichten anbieten. Die bekannteste Seite ist \enquote{buzzfeed} und \enquote{tasty}. Außerdem wurden auch Webseiten wie \enquote{web.de} oder \enquote{tv-movie}\footnote{Beinhaltet außerdem Schlagzeilen aus den Bereichen \enquote{tasty} und \enquote{quiz}} nach Clickbaits gescannt. Das Screening wurde am November 2020 durchgeführt. Um jedoch zu gewährleisten, dass die Nachrichten zeitlich weit außereinder liegen und somit eine größere Diversität haben, wurden Webseiten ausgewählt die Ihre Nachrichten in gewisser Weise Archivieren. Die gesammelten Daten reichen teilweise über ein Jahr zurück. Wie im Listing~\ref{Scrapy} unter in Zeile 12 zu sehen ist, besitzt die Seite im Beispiel eine Pagination-Funktion. Diese kann dafür verwendet werden, um auch ältere Nachrichten zu erfassen.
-
-\begin{table}[h]
-    \caption{Vergleich der Rohdaten nach dem Scrapingvorgang}
-    \label{Datensatz_Herkunft}
-    \renewcommand{\arraystretch}{1.2}
-    \centering
-    \sffamily
-    \begin{footnotesize}
-        \begin{tabular}{l l l}
-            \toprule
-            \textbf{Quelle}   & \textbf{Methodik} & Elemente \\
-            \midrule
-            de.wikinews.org   & API-Zugang        & 10.612   \\
-            web.de            & Web Scraping      & 14.163   \\
-            tvmovie.de        & Web Scraping      & 9.428    \\
-            buzzfeed.de       & Web Scraping      & 798      \\
-            promipool.de      & Web Scraping      & 26.779   \\
-            heftig.de         & Web Scraping      & 605      \\
-            frauenseite.net   & Web Scraping      & 148      \\
-            bravo.de          & Web Scraping      & 7.476    \\
-            \midrule
-            Summe Clickbaits  &                   & 59.407   \\
-            Summe Nachrichten &                   & 10.612   \\
-            Summe insgesamt   &                   & 70.019   \\
-            \bottomrule
-        \end{tabular}
-    \end{footnotesize}
-    \rmfamily
-\end{table}
-
-
-
-Das Verfahren wurde automatisch mittels eines programmierten Scrapers je Seite durchgeführt. Ein Scraper ist ein Programm, welches Informationen aus einer Webseite automatisch extrahieren kann. Dieses gelingt, indem es nach HTML- oder CSS-Attributen oder sogar AJAX-Requests durchsucht oder diese imitiert. Im Listing~\ref{Scrapy} wird ein Web-Scraper vorgestellt. Scrapy führt in einer Schleife HTTP-Requests durch welche jeweils eine Antwort bekommen. Es können auch AJAX-Anfragen gesendet werden (z.B. ein POST-Request). Wenn die Anfrage Erfolgreich ist, kann die daraus resultierende Antwort auf bestimmte Eigenschaften und Attribute durchsucht werden (im Beispiel werden CSS-Attribute durchsucht). Diese Attribute beinhalten meisten die gewünschte Information, welches dann wie in der \texttt{parse\_url} und \texttt{parse\_page} Methode gezogen und in eine Datenbank gespeichert wird.
-
-
-
-\begin{lstlisting}[language=Python,caption=Beispiel eines Scrapers,label={Scrapy}]
-import scrapy
-from scrapy.http.request import Request
-from datetime import datetime
-from klickscraper.items import WebdeItem
-
-
-class WebdeSpider(scrapy.Spider):
-    name = "webde"
-    scraped_at = datetime.now()
-
-    def start_requests(self):
-        for i in range(287):
-            url = f"https://web.de/magazine/unterhaltung/stars/p{i}"
-            yield Request(
-                dont_filter=True,
-                callback=self.parse_url,
-                url=url)
-
-    def parse_url(self, response):
-        follow_ulrs = response.css(
-            ".teaser-article__full").css("a::attr(href)").getall()
-        for f in follow_ulrs:
-            yield Request(
-                url=f,
-                dont_filter=True,
-                callback=self.parse_page)
-
-    def parse_page(self, response):
-        if len(response.css("p::text").getall()) > 10:
-            text = " ".join(response.css("p::text").getall())
-        else:
-            text = None
-        yield WebdeItem(title=response.css("title::text").get(),
-                        text=text,
-                        scraped_at=self.scraped_at)
-\end{lstlisting}
-
-
-\subsection{Rohdatenanalyse}
-Um aus den Rohdaten Schlüsse über die sprachlichen Eigenschaften zu ziehen wird im folgenden Abschnitt eine explorative Rohdatenanalyse durchgeführt. Um dies möglichst zu vereinfachen, wird der Rohdatensatz welches in einer SQL-Datenbank gespeichert wurde in ein Pandas\footnote{Pandas ist ein schnelles, flexibles und benutzerfreundliches Open-Source-Tool zur Analyse und Bearbeitung von Daten in Python.} Dataframe umgewandelt.
-Aus der Abbildung~ist zu sehen, dass die Titel aus Wikinews länger sind. Neben der Länge der Schlagzeilen ist auch die Analyse der Wortauswahl wichtig. Aus der Literaturstudie können bestimmte Merkmale von Clickbaits festgestellt werden. Clickbaits enthalten meistens eine Frage oder Zahlen. Außerdem ist bei Clickbaits auch eine gewisse Wortauswahl festzustellen. Die Zuordnung der Wörter je Clickbait-Schlagzeile zu den Wortarten (Part-of-speech-Tagging oder POS-Tagging) wurde mittels der Python NLP-Bibliothek Spacy durchgeführt. Bei der Auswahl der Tags nachdem gesucht werden sollte, wurden die Erkenntnisse aus Kapitel 4 Berücksichtigt. Die Ergebnisse diese Analyse sind aus der Tabelle~\ref{pos} zu entnehmen.
-
-\begin{table}[h]
-    \caption{Vergleich der Ergebnisse des Part-of-speech-Taggings}
-    \label{pos}
-    \renewcommand{\arraystretch}{1.2}
-    \centering
-    \sffamily
-    \begin{footnotesize}
-        \begin{tabular}{l l l}
-            \toprule
-            \textbf{TAG}                  & \textbf{Auffälliges Wort (Häufigkeit)} \\
-            \midrule
-            ADJA  (attributives Adjektiv) & neu (1759), neue (1474)                \\
-            ADJD   (adverbiales Adjektiv) & krass (171), wirklich  (349)           \\
-            ADV   (Adverb)                & so (5142), endlich (357)               \\
-            PDAT (Demonstrativpronomen)   & dies (3566)                            \\
-            PROAV   (Pronominaladverb)    & darum (588), deshalb (251)             \\
-            PWAT (Interrogativpronomen)   & welch (154)                            \\
-            PWAV  (Relativpronomen)       & wie (488) warum (184)                  \\
-            \bottomrule
-        \end{tabular}
-    \end{footnotesize}
-    \rmfamily
-\end{table}
-
-% Eine eigene Analyse durch das Part-of-Speech_tagging mittels Scrapy ergibt einige Auffälligkeiten bezüglich der Clickbaits. Wörter wie \enquote{diese} (attribuierendes Demonstratives Pronomen), \enquote{warum} (adverbiales Interrogativ- oder Relativpronomen) oder \enquote{welche} (attribuierendes Interrogativpronomen) sind einige Auffällige Tags aus den Schlagzeilen der Clickbaits.
-
-
-
-% \begin{lstlisting}[language=Python,caption=Funktion zur Umwandung der Datenbank in en Pandas Dataframe]
-% def connect_to_db(tablename, db_path):
-%     return pd.read_sql_query(
-%         f"SELECT * FROM {tablename}", sqlite3.connect(db_path))
-% \end{lstlisting}\label{Pandasdb}
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=14cm]{kapitel5/hist2.png}
-    \caption[Vergleich der Wortlängen der Rohdaten]{Vergleich der Wortlängen, das Histogramm rechts (Wikinews) ist breiter als das Histogramm links (Clickbaits)}
-    \label{Kap5:Hist2}
-\end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=10cm]{kapitel5/freq_word1.png}
-%     \caption[Häufigsten Wörter aus den Rohdaten der Clickbaits Titel]{Die Darstellung zeigt das Aufkommen der Häufigsten Wörter aus den Titeln der Clickbaits}
-%     \label{Kap5:freq1}
-% \end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=10cm]{kapitel5/freq_word2.png}
-%     \caption[Häufigsten Wörter aus den Rohdaten der Wikinews Titel]{Die Darstellung zeigt das Aufkommen der Häufigsten Wörter aus den Titeln der Wikinews Nachrichten}
-%     \label{Kap5:freq2}
-% \end{figure}
-
-
-\subsection{Labeln der Daten}\label{secLabel}
-Aus der Tabelle~\ref{Datensatz_Herkunft} ist zu entnehmen, dass ca. 60.000 potenzielle Clickbaits vorhanden sind. Um dieses nicht per Hand labeln zu müssen besteht der Ansatz darin, bestimmte Muster zu erkennen und diese Muster auszunutzen, um die Anzahl der Kandidaten auf ein entsprechendes niedriges Niveau zu bringen. Die Literaturstudie und die explorative Datenanalyse bringen gemeinsam folgende Schlüsse:
-
-\begin{enumerate}
-    \item Clickbaits sind meistens Fragen wie \enquote{Welcher Schuh passt dir am meisten?}
-    \item Clickbaits enthalten meistens Zahlen in Form eines Listings \enquote{Das sind die 10 schnellsten Autos}
-    \item Clickbaits haben eine niedrigere Wortlänge als normale Nachrichten
-    \item Clickbaits beinhalten einige für sie markanten Wörter wie \enquote{diese} oder \enquote{so}
-\end{enumerate}
-
-Diese Erkenntnisse können programmatisch umgewandelt werden und somit der Rohdatensatz um ein vielfaches reduziert werden.
-
-
-\begin{lstlisting}[language=Python,caption=Funktion welches ein Dataframe je nach Argumenten labelt, label={Label1}]
-def contains_word(word, row):
-    for r in row:
-        if r in word:
-            return 1
-
-
-def label_data_with_arg(df, col_name, arg_):
-    return df[col_name].apply(
-        lambda x: contains_word(arg_, re.findall(r"[\w']+|[.,!?;]", x.lower())))
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,caption=Funktionen für durchschnittliche Wortlänge und Interpunktion, label={Label2}]
-import re
-import string
-
-
-def remove_punc(text):
-    text = re.sub("\[.*?\]", "", text)
-    text = re.sub("https?://\S+|www\.\S+", "", text)
-    text = re.sub("<.*?>+", "", text)
-    text = re.sub("[%s]" % re.escape(string.punctuation), "", text)
-    text = re.sub("\n", "", text)
-    text = re.sub("\w*\d\w*", "", text)
-    return text
-
-def get_avg_length(string):
-    words = remove_punc(string).split()
-    try:
-        count = int(sum(len(word) for word in words) / len(words))
-    except ZeroDivisionError:
-        count = 1
-    return count
-\end{lstlisting}
-
-\begin{lstlisting}[language=Python,caption=Tagger Funktion, label={Label3}]
-import spacy
-nlp = spacy.load("de")
-
-
-def contains_pos(sentence):
-    list_ = ["PDAT", "ADJD", "ADJA", "PIS", "PWAV", 
-            "PTKA", "VAFIN", "PROAV", "ADV"]
-    doc = nlp(sentence)
-    for token in doc:
-        if str(token.tag_) in list_:
-            return "1"
-
-def label_data_with_pos(df, col_name):
-    return df[col_name].apply(
-        lambda x: contains_pos(x.lower()))
-\end{lstlisting}
-
-
-\subsection{Analyse der Daten}\label{sectionAnalyse}
-Die Summe der Wikinews Nachrichten beträgt ca. 10.000. Mit der Zugabe weiterer 10.000 Clickbaits, die durch das labeln entstehen, ergibt sich ein Datensatz mit 20.000 Beispielen. Die Tabelle~\ref{data} verschafft einen Übrerblick über alle Daten. Interessant ist bei den Clickbaits, dass ca. 33\% aller Clickbaits ein Fragezeichen oder eine Zahl beinhalten und ca. die hälfte aller Daten im Datensatz ein bestimmtes Tag wie \enquote{diese} oder \enquote{so} enthalten. Bei den Wikinews Nachrichten liegen diese Anteile deutlich unten. Alle drei genannten Eigenschaften liegen unter 1\%. Die durchscnittliche Wortlänge beträgt bei den Clickbaits bei 5, während bei den Wikipedia Nachrichten dieses bei 7 liegt.
-
-\begin{table}[h]
-    \caption{Beschreibung des gelabelten Datensatzes}
-    \label{data}
-    \renewcommand{\arraystretch}{1.2}
-    \centering
-    \sffamily
-    \begin{footnotesize}
-        \begin{tabular}{l l l l l l}
-            \toprule
-                           & \textbf{has\_question} & \textbf{has\_keyword} & \textbf{has\_number} & \textbf{avg\_word\_length} & \textbf{label} \\
-            \textbf{count} & 20000                  & 20000                 & 20000                & 20000                      & 20000          \\
-            \textbf{mean}  & 0.1782                 & 0.3190                & 0.0854               & 6.1307                     & 0.5000         \\
-            \textbf{std}   & 0.3826                 & 0.4661                & 0.2795               & 1.7874                     & 0.5000         \\
-            \textbf{min}   & 0                      & 0                     & 0                    & 1.0000                     & 0              \\
-            \textbf{max}   & 1                      & 1                     & 1                    & 27.0000                    & 1              \\
-
-            \bottomrule
-        \end{tabular}
-    \end{footnotesize}
-    \rmfamily
-\end{table}
-
-Bei der Betrachtung der Wörter mit der Word-Cloud Analyse können bestimmte Themen, die die Titel zürückgeben betrachtet werden.  Auffällig sind neben Promis auch die Wörter \enquote{darum}, \enquote{quiz} \enquote{sieht} und \enquote{macht}. Bei den Wikipedia Nachrichten geht es mehr um Deutschland und der Welt.
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=13cm]{kapitel5/wo_click.png}
-    \caption[Word Cloud Analyse für die Clickbaits Schlagzeilen]{Die Darstellung zeigt das Aufkommen der Häufigsten Wörter aus den Titeln der Wikinews Nachrichten}
-    \label{Kap5:clwc}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=13cm]{kapitel5/news.png}
-    \caption[Word Cloud Analyse für die Wikinews Schlagzeilen]{Die Darstellung zeigt das Aufkommen der Häufigsten Wörter aus den Titeln der Wikinews Nachrichten}
-    \label{Kap5:clwc}
-\end{figure}
-
-
-\section{Das Deep Learning Modell}
-\subsection{Analyse der Technologie}
+\chapter{Das Deep Learning Modell}
+\section{Analyse der Technologie}
 \textit{TensorFlow} ist eine Bibliothek, mit der Deep Learning durchgeführt werden können, es wurde im Jahr 2015 von Google Open Source gemacht. Mit TensorFlow werden die Datan als Tensoren dargestellt und fließen durch Schichten. Dieses ermöglicht die Inferent und das Traiing in maschinellen Lernmodellen. Ein Tensor ist ein multidimensionales Array. In neuronalen Netzen und beim Deep Learning wird jedes Datenelement und jedes Berechnungsergebnis als Tensor dargestellt, z.B. kann ein Graustufenbild als 2-Dimensionales-Array dargstellt werden oder ein Farbbild als 3-Dimensionales-Array. Der Tensor kann unterschiedliche Datentypen haben (z. B. float32 oder int32). Neben dem Typen eines Tensors gibt es die zweite Eigenschaft, die Form eines Tensors. Die Form eines Tensors gibt die Größe des Tensors entlang aller seiner Abmessungen an. Beispiel: Ein 2-Dimensionales-Tensor hat die Form (128, 256). Ein Tensor kann unabhängig von den ursprünglichen Daten in ein sogenanntes Layer eingespeist werden, welches nur danach schaut, welcher Datentyp und Form der Tensor hat. Tensoren sind also eine Art Container die Daten organisieren und dafür verwendet werden können, dass diese parallel verarbeitet werden können.
 
 
@@ -327,7 +52,7 @@ Es gab jedoch ein Problem: Es war nicht möglich, TensorFlow- oder Keras-Modelle
      \label{Kap5:tfjsarch}
  \end{figure}
 
-\subsection{Preporcessing}
+\section{Preporcessing}
 Beim Preprocessing der Daten sollte der Text umgewandelt werden, sodass ein Training erfolgen kann. Bei der Erstellung des Datensatzes wurden die Titel weitestgehend gesäubert. Bei einigen Schlagzeilen waren neben dem Titel auch Namen der Seite vorhanden, diese wurden entfernt. Jedoch sollte der Text, wenn noch nicht erfolgt, in Kleinbuchstaben umgewandelt werden. Die Leerzeichen nach und vor dem jeweiligen Satzzeichen sollte getrennt werden. Da bei Clickbaits Satzzeichen wie Fragezeichen oder Ausrufezeichen eine Beudeutung hat werden diese nicht vollständig entfernt und in den Vokabular aufgenommen. Stoppwörter sind bieten normalerweise keine große Relevanz, sind hier jedoch bedeutsam, z.B. Präpositionen.
 
 Beim Preprocessing wird auch der Datensatz in zwei Hälften, des Trainingssatz und des Testsatz aufgeteilt. Es ist üblich dieses in einer Ratio von 0.8/0.2 auszuführen. Das Ziel ist es vorherzusagen, ob eine bestimmte Schlagzeile Clickbait ist oder nicht. Dieses Bedeutet, dass nach der Entwicklung des Modells Vorhersagen über neue Textüberprüfungen getroffen werden muss. Dieses erfordert, dass für diese neue Überprüfung dieselbe Datenvorbereitung durchgeführt wird, wie für die Trainingsdaten für das Modell. Um sicherzustellen, dass diese Einschränkungen in die Bewertung der Modelle integriert wird, wird vor jeder Datenaufbereitung der Datensatz, in Trainings- und Testsatz aufgeteilt. In der Funktion~\ref{TrainTestFunc} wird der Datensatz aus einer CSV-Datei gelesen und mittels Pandas in ein Dataframe umgewandelt. Es werden zufällig 80\% der Titel \enquote{maskiert} und entsprechend aufgeteilt und als Tupel zurückgegeben. Es entstehen somit ca. 16.000 Beispiele für das Training und 4.000 Beispiele für das Testen.
@@ -364,7 +89,7 @@ train["Title"] = train["Title"].apply(lambda x: text_cleaner(x))
 test["Title"] = test["Title"].apply(lambda x: text_cleaner(x))
 \end{lstlisting}
 
-\subsection{Das Erstellen eines Vokabulars}
+\section{Das Erstellen eines Vokabulars}
 
 
 Es ist wichtig ein Vokabular bekannter Wörter zu definieren, wenn One-Hot-Encoding oder ein Einbettungsmodell verwendet wird. Je mehr Wörter vorhanden sind, desto größer ist die Darstellung von Dokumenten. Daher ist es wichtig, die Wörter nur auf diejenigen zu beschränken, von denen angenommen wird, dass sie vorhersagbar sind. Dies ist im Voraus schwer zu wissen und oft ist es wichtig, verschiedene Hypothesen zum Aufbau eines nützlichen Vokabulars zu testen. Aus dem vorherigen Abschnitt wurde einige Interpunktion (alles außer Fragenzeichen und Ausrufezeichen und Punkt) entfernt. Zahlen wurden nicht entfernt und auch Stoppwörter sind dem Datensatz enthalten. Es kann also aus allen Schlagzeilen eine Reihe aller bekannten Wörter ermittelt werden. Jedes Element im Vokabular wird als Zahl dargestellt. Es handelt sich also um eine Wörterbuchzuordnung von Wörtern und deren Index. Somit kann das Wort auf eine einfache Weise aktualisiert und abgefragt werden.
@@ -428,7 +153,7 @@ test_dataset = tf.data.Dataset.from_tensor_slices((tokenized_text_test, y_test))
 
 
 
-\subsection{Die Modellarchitektur}
+\section{Die Modellarchitektur}
 
 
 
@@ -505,7 +230,7 @@ Mit der \texttt{compile}-Methode lässt sich das Modell bauen und die \texttt{su
     \rmfamily
 \end{table}
 
-\subsection{Das Training}
+\section{Das Training}
 
 Mit der Funktion \texttt{train\_model} aus Listing~\ref{TrainModel} lässt sich das Modell trainieren. Zunächst muss als Parameter angegeben werden, wie viele Trainingsepochen das Modell trainiert werden soll. Ein vollständiger Trainingsdurchlauf über den gesamten Datensatz, sodass jedes Beispiel einmal gesehen wurde wird als Epoche genannt. Die \texttt{batch\_size} sind die Anzahl der Beispiele in einer Charge/Epoche. Vor dem Training bietet sich die Möglichkeit, die Daten zu mischen, dieses erfolgt mit dem Parameter \textit{shuffle}. Analysen über das Training kann mit TensorBoard durchgeführt werden. TensorBoard bietet die Visualisierung und Werkzeuge, die für Experimente mit maschinellem Lernen erforderlich sind. Metriken wie Verlust und Genauigkeit können mit TensorBoard für jede Epoche dargestellt werden. Damit TensoBoard im späteren Verlauf verwendet werden kann, wird eine Callback-Funktion eingebaut, welches den Verlauf des Trainings in Logdateien speichert. Mit der \textit{fit}-Methode erfolgt das Training (siehe Listing~\ref{TrainModel}).
 
@@ -531,7 +256,7 @@ train_model(num_epochs=7, batch_size=32, train_ds=train_dataset, test_ds=test_da
 
 
 
-\subsection{Evaluation}\label{evaSec}
+\section{Evaluation}\label{evaSec}
 
 Das sogennante \enquote{cross validation} ist ein Mechanismus zum Schätzen, wie gut sich ein Modell auf neue Daten verallgemeinern lässt, indem das Modell anhand einer oder mehrerer nicht überlappender Datenuntergruppen getestet wird, die aus dem Trainingssatz zurückgehalten werden. Mit der Bibliothek \enquote{sklearn} können mit der Methode \texttt{classification\_report} einen Textbericht mit den wichtigsten Klassifizierungsmetriken erstellt werden. Dieser Report gibt Auskünft über bestimmte Metriken, mit der das Performance des Modells auf den vorhandenen Daten gemessen werden kann. 
 
@@ -617,11 +342,11 @@ In der Tabelle~\ref{PredictNewTab} sind die Ergebnisse des Experiments aus dem L
 
 Das Modell kann aber auch falsch Alarm schlagen. Wie im Beispiel \enquote{Corona im News-Ticker: RKI meldet über 2 Mio. Infektionen - droht Mega-Lockdown?}, zwar ist hier ein Wort \enquote{Mega} welches ein oft in Clickbaits verwendetes Wort ist und auch eine Zahl (2) ist enthalten, ebenfalls wird eine Frage gestellt. Das Modell kann aber nicht erkennen, bzw. weiß nicht, dass diese Mittel (das Stellen einer Frage, verwenden von Zahlen usw.) auch in konventionellen Nachrichten verwendet werden. Hier wird deutlich, dass alleine die Überprüfung des Titels der Nachricht, auch zu falschen Ergebnissen führen kann. Es sollte ebenfalls der Inhalt der Nachricht überprüft und aus dem Zusammenhang beider Ergebnisse eine Vorhersage gemacht werden. Es ist jedoch auffällig, dass das Modell Schwierigkeiten hat Nachrichten zu erkennen aber weniger Probleme damit hat, Clickbaits zu erkennen. Dieses könnte daran liegen, dass Nachrichten oft falsch intrepetiert werden können, weil sie bestimmte Eigenschaften haben, die in Clickbaits vorhanden sind.
 
-\subsection{Experimente}
+\section{Experimente}
 
 Wie im Abschnitt~\ref{overundersec} beschrieben ist die Über- bzw. Unteranpassung zu vermeiden. Zwar gibt es Strategien wie im Abschnitt~\ref{regSec} definiert, aber auch die Anpassung der Hyperparameter wie die Lernrate können wichtige Auswirkungen auf das Kriterium der Über- oder Unteranpassung haben. Ein weiteres Experiment kann gemacht werden, welches die Lernrate und die Auswirkung der Lernrate( im Abschnitt~\ref{learnsection} näher beschrieben), untersucht. Das Ziel dieser Experimente soll dabei Untersuchen, ob und wie sich das Modell ändert. Das Modell aus Tabelle~\ref{modellBesch} hat 32 Einbettungsdimensionen. Die Lernrate beträgt 0.00006 und sie hat eine Dropout-Rate von 0.35. Ziel ist es zu sehen, ob das Modell besser performt oder nicht und dabei nicht eine Überanpassung entsteht. Das Modell liefert zwar gute Ergebnisse, aber es sollte betrachtet werden, dass der Datensatz relativ klein ist und das Modell bei einem größeren Datensatz nicht so gut performen könnte. Folgende Fragen werden mit 3 Experimenten näher betrachtet.
 
-\paragraph{Welche Auswirkung hat die steigerung der Einbettungsdimension?}
+\paragraph{Die Veränderung der Einbettungsdimension}
 Die Einbettungsdimension ist der Parameter, der über die Dimensionalität der Einbettung entscheidet. Je größer diese Dimension ist, desto mehr Parameter sollten entstehen, da das Modell diese Einbettungen lernen muss. Somit würde vom Volumen her ein größeres Modell entstehen, welches bei gleicher Performance vermieden sollte. Dieser Parameter wird von 32 auf 320 gesetzt. Alle anderen Parameter wurde nicht verändert. An der Performance ändert sich wenig (siehe Tabelle~\ref{eval32}) jedoch entsteht eine Überanpassung ab der 3. Epoche des Trainings (siehe Abbildung~\ref{32embdpic}).
 
 \begin{table}[h]
@@ -736,213 +461,5 @@ Dem Modell aus Tabelle~\ref{modellBesch} werden zusätzliche Conv1D-Schichten hi
     \label{extrlayerspic}
 \end{figure}
 
-\subsection{Speichern und Konvertierung des Modells und der Tokens}
+\section{Speichern und Konvertierung des Modells und der Tokens}
 Das Keras Modell wird mit als h5-Datei gespeichert. Diese Datei kann mit dem TensorFlow.js Konverter, welches Keras Modelle in für TensorFlow.js geeignete Modelle umwandelt, konvertieren. Das Ergebnis dieser Konversion ist, eine JSON-Datei (model.json), welches das Modell beschreibt. Dazu kommen Binäre Dateien, welches die Gewichte des Modells darstellen. Zusammen können Sie für Inferenz benutzt werden. Neben dem Modell werden alle Tokens mit ihrem Index als JSON gespeichert (vocab.json und tokenizer.json).
-
-
-
-\section{Deep Learning Modelle im Web}
-Das Modell muss in einer Art und Weise für den Nutzer zugänglich gemacht werden. Das Modell welches in dieser Arbeit entwickelt wurde, kann nur Zahlen verstehen. Es muss also in erster Linie ein Encoder diese Strings in Zahlen umwandeln. Je nach Plattform wird dann die Berechnung stattfinden, welches Vorhersagt, ob die Eingabe ein Clickbait war oder nicht. 
-
-Bevor TensorFlow.js entwickelt wurde, ließ dieses sich mittels eines Servers erfolgen. Ein HTTP-Endpunkt welches die Eingabe z.B. mittels JSON liest, kann dann im Server die Berechnung ausführen (serverseitig). Durch TensorFlow.js kann das Modell in den Browser geladen werden und zur Inferenz herangezogen werden.
-
-In diesem Abschnitt wird zunächst die konventionelle, serverseitige Alternative Vorgstellt, im Anschluss darauf wird die in dieser Arbeit vorgeschlagene Methode des clientseitigen Deep Learnings, praktisch angewendet. Beide Methoden haben Ihre Vor- und Nachteile, diese sollen anschließend analysiert werden.
-
-\subsection{Serverseitiges Deep Learning}
-Um das Deep Learning auf der Seite des Servers auszuführen wird ein Server mittels Flask, welches in Python geschrieben wurde, entwickelt. Dieser Server hat nur eine Route, welches ein POST-Request aufnimmt. Dieser Request wird als JSON zugeführt. Nachdem der Server diese JSON-Information aufgenommen hat, kann er den Text in das Modell weitergeben. Da das Modell nur Zahlen versteht, ist das Encoden der Texte erforderlich. 
-
-\begin{lstlisting}[language=Python,caption=Beispiel eines Servers für die Vorhersage von Clickbaits, label={Server}]
-from flask import Flask, request
-from keras.preprocessing.text import tokenizer_from_json
-from keras.preprocessing.sequence import pad_sequences
-from keras.models import load_model
-from flask import request
-import numpy as np
-import json
-
-
-labels = np.array(["Clickbait", "News"])
-model = load_model(2model/model.h5")
-with open("model/tokenizer.json") as f:
-    tokenizer = tokenizer_from_json(json.load(f))
-
-
-def encode(text):
-    return pad_sequences(tokenizer.texts_to_sequences(text), maxlen=40)
-
-
-@app.route("/predict", methods=["POST"])
-def postJsonHandler():
-    if request.method == "POST":
-        return json.dumps({"prediction": labels[np.argmax(model.predict(encode([request.get_json()["text"]])))]})
-
-        
-if __name__ == "__main__":
-    app.run()
-\end{lstlisting}
-
-Der Client kann einen HTTP-Endpunkt dafür verwenden, um die Verbindung mit dem Server und somit mit dem Modell durchzuführen.
-
-
-
-\subsection{Clientseitges Deep Learning}
-Dieser Abschnitt beschäftigt sich mit dem clientseitigen Deep Learning. Um TensorFlow.js praktisch anzuwenden wurde in React\footnote{React ist ein Frontend Framework für JavaScript. Es wurde von Facebook entwickelt und ist Open Source} ein Frontend entwickelt, welches vom Modell gebrauch macht.  Um Inferenz zu bilden ist ein Server nicht mehr nötig. Alleine der Zugriff auf die \enquote{model.json} Datei und die jeweiligen Gewichte reichen für diese Variante aus. Die Dateien werden auf einem Server von AWS gehostet und können in den Browser geladen werden. Das Frontent wird außerdem die gesamte TensorFlow.js Bibliothek in den Browser laden müssen. Da die gesamte Inferenz im Browser stattfindet, muss auf die Größe des Modells geachtet werden. Das in dieser Arbeit entwickelte Modell ist mit seiner gesamten Größe von 3 MB relativ klein. 
-
-\begin{lstlisting}[language=bash,caption=Wichtigste Elemente der Benuteroberfläsche, label={OrdnerStr}]
-|____src
-| |____constants
-| | |____constants.js
-| |____hooks
-| | |____index.js
-| | |____useLoadVocab.js
-| | |____useLoadModel.js
-| |____helpers
-| | |____splitText.js
-| | |____index.js
-| | |____tokenize.js
-| |____index.js
-| |____App.js
-\end{lstlisting}
-
-\subsubsection{Tokenisierung und Padding}
-Unter dem Verzeichnus \enquote{helpers} befinden sich die Skripte zur Erstellung der Tokens. Der von dem User eingegebene Text muss in seine Tokens gebracht und außerdem muss die Interpunktion gefiltert werden (außer Ausrufezeichen und Fragezeichen). Ein Wort darf außerdem nicht weniger als ein Zeichen enthalten und außerdem müssen die Wörter in Kleinbuchstaben umgewandelt werden, da das \enquote{vocab.json} nur solche enthält. Im Listing~\ref{splitText} wird die Funktion dargestellt, welches den Satz, welches der Nutzer eingibt in Token umwandelt. Hier wird ein vorprogrammiertes Tokeniser\footnote{https://www.npmjs.com/package/wink-tokenizer} verwendet, welches die Tokens taggen kann. Die Tokens werden entsprechend gefiltert und und als Array zurückgegeben. Das Ergebnis dieser Prozedur muss den Tokens aus der Python Umbegung gleichen, sonst wird das Modell etwas anderes zu Gesicht bekommen, als eingegeben.
-
-\begin{lstlisting}[language=JavaScript, caption=Die splitText Funktion, label={splitText}]
-const tokenizer = require('wink-tokenizer');
-const myTokenizer = tokenizer();
-
-const splitText = (sentence) => {
-  const tokens = myTokenizer.tokenize(sentence);
-  const splitted = [];
-  tokens.forEach((token) => {
-    if (token.tag === 'number') {
-      splitted.push(token.value);
-    } else if (token.tag === 'word') {
-      if (token.value.length >= 1) {
-        splitted.push(token.value.toLowerCase());
-      }
-    } else if (token.tag === 'punctuation') {
-      if (token.value === '?' || token.value === '!') {
-        splitted.push(token.value);
-      }
-    }
-  });
-
-  return { splitted: splitted, splittedLen: splitted.length };
-};
-
-export default splitText;
-\end{lstlisting}
-
-Im nächsten Schritt müssen die Tokens in Zahlen umgewandelt werden. In der Python Umgebung wurde dies mit der Methode \texttt{pad\_sequences} aus der Keras-Bibliothek ausgeführt. In JavaScript gibt es keinen Ersatz für diese Methode, sodass es selbst programmiert wird. Die \texttt{tokenize}-Funktion nimmt den Text den der Client eingibt und führt diese in die \texttt{splitText}-Funktion ein. Für alle Tokens wird ein Abgleich mit der \texttt{vocab.json} erstellt und wenn ein Treffer gefunden wurde, der Index in eine Array eingeführt. Die maximale Länge wird später aus der Datei \texttt{constants.js} entnommen und beträgt in diesem Beispiel 40. Damit entsteht ein Array der Länge 40, mit \textit{n} Treffern und \textit{40-n} Nullen. Der Parameter \texttt{vocabLoading} ist ein Boolean, welches eine Aussage darüber gibt, ob die \texttt{vocab.json} lädt oder nicht, welches asynchron geladen wird, da sonst dieser Prozess den gesamten Verlauf blockieren würde. 
-
-
-\begin{lstlisting}[language=JavaScript, caption=Die tokenize Funktion, label={tokenizejs}]
-import splitText from './splitText';
-
-const tokenize = (text, vocabLoading, vocab, maxLen) => {
-  const { splitted } = splitText(text);
-  const tokens = [];
-
-  if (!vocabLoading) {
-    splitted.forEach((element) => {
-      if (vocab[element] !== undefined) {
-        tokens.push(vocab[element]);
-      }
-    });
-
-    while (tokens.length < maxLen) {
-      tokens.push(0);
-    }
-  }
-  return tokens.slice(0, maxLen);
-};
-
-export default tokenize;
-\end{lstlisting}
-
-\subsubsection{Laden des Modells und Vokabulars}
-Die sich im Verzeichnis \enquote{hooks} befindenden Dateien \texttt{useLoadVocab} und \texttt{useLoadModel} sind sogenannte Benutzerdefinierte React Hooks \footnote{Hooks sind eine relativ neue Ergänzung in React. Mit ihnen können funktionale UI-Komponenten verwendet werden, die die herkömlichen Klassen ersetzen.}. Mit einem benutzerdefinierten Hook soll die Logik einiger Komponenten in eine wiederverwendbare Funktion extrahiert werden. Sie ist eine JavaScript-Funktion. Die \texttt{useLoadModel} und \texttt{useLoadVocab} Hooks sind sehr ähnlich. Sie fetchen aus einer Url das Modell oder das Vokabular asynchron und geben, wenn Fehler beim fetchen entstehen, einen Fehler zurück. Außerdem teilen Sie der UI mit, ob das Modell oder das Vokabular lädt. Somit wird die Logik abstrahiert und kann durch einfachen Abruf woanders im Code ausgeführt werden. Durch das Einbinden von TensorFlow.js in die UI, hat der Client vollen Zugriff auf die Klasse TensorFlow. Mit der Methode \texttt{loadLayersModel} kann ein Modell geladen werden, welches aus Ebenenen besteht, einschließlich seiner Gewichte. Die Methode \texttt{ready} gibt ein Promise zurück, welches aufgelöst wird, wenn das aktuell ausgewählte Backend initialisiert wurde. Es findet also eine \enquote{asynchrone Initialisierung} statt.
-
-
-\begin{lstlisting}[language=JavaScript, caption=Das useLoadModel Hook, label={useLoadModel}]
-import { useState, useEffect } from 'react';
-import * as tf from '@tensorflow/tfjs';
-
-const useLoadModel = (url) => {
-  const [model, setModel] = useState();
-  const [modelLoading, setModelLoading] = useState(true);
-  const [modelError, setModelError] = useState('');
-  
-  const loadModel = async (url) => {
-    try {
-      const model = await tf.loadLayersModel(url);
-      setModel(model);
-      setModelLoading(false);
-    } catch (error) {
-      setModelError(error);
-      setModelLoading(true);
-    }
-  };
-
-  useEffect(() => {
-    tf.ready().then(() => {
-      loadModel(url);
-    });
-  }, [url]);
-
-  return {
-    model,
-    setModel,
-    modelLoading,
-    setModelLoading,
-    modelError,
-    setModelError,
-  };
-};
-
-export default useLoadModel;
-\end{lstlisting}
-
-\subsubsection{Die Vorhersage des Modells}
-Die \texttt{predict}-Funktion wird in der Datei \texttt{App.js} aufgerufen und ist ein somit die Handler-Funktion eines Events, welches die Vorhersage ausführt, wenn gewünscht wird. Die API von TensorFlow.js bietet eine Methode Namens \texttt{tidy} welches die bereitgestellte Funktion ausführt und nach der Ausführung alle von der Funktion zugewiesenen Zwischentensoren mit Ausnahme der Funktion zurückgibt. Mit dieser Methode können Speicherleaks vermieden werden. Ein Array mit den Tokens wird in ein 2 Dimensionales Tensor umgewandelt und geht durch das Modell. Mit \texttt{dispose} wird der Tensor dann am Ende aus dem Speicher entsorgt.
-
-\begin{lstlisting}[language=JavaScript, caption=Auszug aus der predict Funktion, label={prediJS}]
-const predict = async () => {
-    const predictedClass = await tf.tidy(() => {
-      const tokenisation = tokenize(inputText, vocabLoading, vocab, maxLen);
-      if (tokenisation.length > 0) {
-        const input = tf.tensor2d(tokenisation, [1, maxLen]);
-        if (!modelLoading) {
-          const predictions = model.predict(input);
-          return predictions.as1D().argMax();
-        }
-      }
-    });
-  };
-\end{lstlisting}
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=14cm]{kapitel5/frontend.png}
-    \caption[Das Frontend]{Die Benutzeroberfläsche, welches im Hintergrund mit dem Deep Learning Modell kommuniziert.}
-    \label{Frontend}
-\end{figure}
-
-\subsection{Vergleich beider Ansätze}
-
-
-In diesem Abschnitt sollen die Ansätze \enquote{serverseitiges Deep Learning} und \enquote{clientseitiges Deep Learning} verglichen werden. Beide Ansätze haben Ihre Vor- und Nachteile. Die Vorteile für das clientseitige Deep Learning sind, dass es geringe Serverkosten hat, die Inferenzlatenz geringer ist und eine Datenprivatsphäre gewährleistet ist. 
-
-\textit{Serverkosten} spielen beim Entwerfen und Skalieren von Webdiensten eine wichtige Rolle. Häufig müssen GPU-gesützte Server bereitgestellt werden  \cite[19]{cai2020deep}. Beim clientseitigen Deep Learning muss ein kleines Modell (in diesem Beispiel 3 MB) bereitgestellt werden und daraus kann die Inferenz gebildet werden.
-
-Ein weiterer Punkt ist die \textit{Inferenzlatenz}. Für bestimmte Arten von Anwendungen ist die Anforderung an die Latenz so hoch, dass die Deep-Learning-Modelle auf der Clientseite ausgeführt werden müssen. Alle Anwendungen, die Audio-, Bild- und Videodaten in Echtzeit enthalten, fallen in diese Kategorie. Wenn Daten erst auf ein Server geladen werden müssen um dann eine Antwort zu erhalten, steigt somit auch die Latenzzeit. Die clientseitige Inferenz behebt diese potenziellen Latenz- und Konnektivitätsprobleme, indem die Daten und die Berechnung auf dem Gerät gespeichert werden \cite[20]{cai2020deep}. Bei NLP Deep Learning Anwendungen ist fällt dieses Argument nicht so stark an, da Textdaten meistens kleiner sind, ist die Inferenzlatenz auch geringer.
-
-\textit{Datenschutz} ist ein weiterer Vorteil des clientseitigen Deep Learnings. Das Thema Datenschutz wird heute immer wichtiger. Für bestimmte Arten von Anwendungen ist der Datenschutz eine absolute Voraussetzung. Anwendungen in Bezug auf Gesundheits- und medizinische Daten sind ein prominentes Beispiel. In vielen Ländern erlauben die Datenschutzbestimmungen für Gesundheitsinformationen nicht, dass z.B. Bilder auf einen zentralen Server übertragen werden. Eine weiteres Szenario könnten juristische Dokumente sein, die nicht auf ein drittes Server gelangen sollten \cite[20]{cai2020deep}. 
-
-Für \textit{größere Modelle} eignet sich das clientseitige Deep Learning nicht, da es für den Nutzer nicht praktisch ist, größere Mengen an Daten (im Form eines Modells) in den Browser zu laden. Ein weiterer Vorteil für das serverseitige Deep Learning ist, dass \textit{Python} als Programmiersprache wesentlich reifer ist, als JavaScript, wenn es um Deep Learning geht. 
-
-
-
-
