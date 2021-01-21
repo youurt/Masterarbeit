@@ -1,19 +1,17 @@
 \chapter{Die Natürliche Sprache}\label{ch3}
 
 
-Die \textbf{Verarbeitung natürlicher Sprache} (NLP) ist ein theoretisch motivierter Bereich von Computertechniken, zum Analysieren und Darstellen natürlich vorkommender Texte auf einer oder mehreren Ebenen der Sprachanalyse, um eine menschenähnliche Sprachverarbeitung für eine Reihe von Aufgaben oder Anwendungen zu erreichen \cite*{Liddy}.
+Die \textit{Verarbeitung natürlicher Sprache} (\enquote{NLP}) ist ein theoretisch motivierter Bereich von Computertechniken, zum Analysieren und Darstellen natürlich vorkommender Texte auf einer oder mehreren Ebenen der Sprachanalyse, um eine menschenähnliche Sprachverarbeitung für eine Reihe von Aufgaben oder Anwendungen zu erreichen \cite*{Liddy}.
 
-Der Umgang mit Textdaten ist problematisch, da unsere Computer, Skripte und Modelle für maschinelles Lernen, keinen Text im menschlichen Sinne lesen und verstehen können. Wörter können viele verschiedene Assoziationen aufrufen, diese sprachlichen Assoziationen sind das Ergebnis recht komplexer neurologischer Berechnungen. ML-Modelle sind haben dieses vorgefertigte Verständnis der Wortbedeutung nicht.
+Der Umgang mit Textdaten ist problematisch, da heutige Computer, Skripte und Modelle für maschinelles Lernen, keinen Text im menschlichen Sinne lesen und verstehen können. Wörter können viele verschiedene Assoziationen aufrufen. Diese sprachlichen Assoziationen sind das Ergebnis recht komplexer Berechnungen beim Menschen. ML-Modelle haben dieses vorgefertigte Verständnis der Bedeutung nicht.
 
 
-\section{Tokenisieren und Extrahieren durch Reguläre Ausdrücke}
-Das Segmentieren eines Textes in seine Einheiten ist die erste Voraussetzung für dessen Weiterverarbeitung. In der Informatik können einzelne Wörter bzw. Tokens durch Leerzeichen voneinander abgetrennt werden.
-
-Reguläre Ausdrücke können die Tokenisierung verbessern. Reguläre Ausdrücke sind eine Sprache zur Angabe von Textsuchzeichenfolgen. Diese praktische Sprache wird in allen Computersprachen, Textverarbeitungs- und Textverarbeitungswerkzeugen verwendet. Formal ist ein regulärer Ausdruck eine algebraische Notation zur Charakterisierung einer Reihe von Zeichenfolgen. Sie sind besonders nützlich für die Suche in Texten, wenn ein Muster gesucht wird und ein Korpus von Texten durchsucht werden muss. Eine Suchfunktion für reguläre Ausdrücke durchsucht den Korpus und gibt alle Texte zurück, die dem Muster entsprechen. Der Korpus kann ein einzelnes Dokument oder eine Sammlung sein \cite*[3]{Jurafskya}. Reguläre Ausdrücke sind also bestimmte Regeln die Muster in einem Text erkennen lassen. Neben der Tokenisierung können sie auch für das extrahieren von Informationen aus Textsequenzen verwendet werden.
+\section{Tokenisierung durch Reguläre Ausdrücke}
+Die Segmentierung eines Textes in seine Einheiten ist die erste Voraussetzung für dessen Weiterverarbeitung. In der Informatik können einzelne Wörter bzw. \enquote{Tokens} z.B. durch Leerzeichen voneinander abgetrennt werden. \textit{Reguläre Ausdrücke} können die Tokenisierung verbessern. Reguläre Ausdrücke können dabei helfen die Sprache so zu trennen, wie angegeben. Sie ist eine Sprache. Diese Sprache wird in allen Computersprachen verwendet. Formal ist ein regulärer Ausdruck eine algebraische Notation zur Charakterisierung einer Reihe von Zeichenfolgen. Sie sind besonders nützlich für die Suche in Texten, wenn ein Muster gesucht wird und ein Korpus von Texten durchsucht werden muss. Eine Suchfunktion für reguläre Ausdrücke durchsucht den Korpus und gibt alle Texte zurück, die dem Muster entsprechen. Der Korpus kann ein einzelnes Dokument oder eine Sammlung sein \cite*[3]{Jurafskya}. Reguläre Ausdrücke sind also bestimmte Regeln die Muster in einem Text erkennen lassen. Neben der Tokenisierung können sie auch für das extrahieren von Informationen aus Textsequenzen verwendet werden.
 
 \section{N-Gramm}
 
-Sprachmodelle sind Wortfolgen zu denen Wahrscheinlichkeiten zugewiesen wurden. Das einfachste Sprachmodell ist das N-Gramm Sprachmodell. Es ist eine Folge von N Wörtern (ein 2-Gramm oder Bigramm ist eine Folge von zwei Wörtern usw.). N-Gramm wird meistens dafür verwendet, um das nächste Wort in aus einer Sequenz vorherzusagen \cite*[31]{Jurafskya}. Angenommen ein Korpus besteht aus folgenden 4 Sätzen:
+Sprachmodelle sind Wortfolgen, zu denen Wahrscheinlichkeiten zugewiesen wurden. Das einfachste Sprachmodell ist das \textit{N-Gramm} Sprachmodell. Es ist eine Folge von N Wörtern (ein 2-Gramm oder Bigramm ist eine Folge von zwei Wörtern usw.). N-Gramm wird meistens dafür verwendet, um das nächste Wort in aus einer Sequenz vorherzusagen \cite*[31]{Jurafskya}. Angenommen ein Korpus besteht aus folgenden 4 Sätzen:
 
 \begin{enumerate}
     \item Es regnet in Berlin.
@@ -25,7 +23,7 @@ Sprachmodelle sind Wortfolgen zu denen Wahrscheinlichkeiten zugewiesen wurden. D
 Um die Wahrscheinlichkeit \textit{P (regnet | in)} herauszufinden, wird die Anzahl des Wortes \enquote{regnet} im Korpus gezählt. Es wird gezählt, wie oft \enquote{regnet} und \enquote{in} zusammen vorkommen (2 Mal) und dieses wird dividiert durch 3, da \enquote{regnet} insgesamt 3 Mal im Korpus vorkommt. Das Bigramm \enquote{regnet in} hat also eine Wahrscheinlichkeit von 2/3.
 
 \section{Part-of-Speech Tagging}
-Part-of-Speech Tagging ist der Prozess des Zuweisens einer Tags zu jedem Wort in einem Eingabetext. Die Eingabe in einen Kennzeichnungsalgorithmus ist eine Folge von tokenisierten Wörtern und einem Tag-Satz, und die Ausgabe ist eine Folge von Tags, eines pro Token \cite*[148]{Jurafskya}. Je nach Sprache gibt es verschiedene Tagger, für das Deutsche gibt es das Stuttgart-Tübingen-Tagset\cite*{tagger}, einige Tags können aus der Tabelle~\ref{STTS} entnommen werden. Die Tagger wurden ursprünglich manuell erfasst und in heutiger Zeit durch das Maschinelle Lernen automatisiert.
+\textit{Part-of-Speech Tagging} ist der Prozess des Zuweisens eines Tags zu jedem Wortm auseinem Eingabetext. Die Eingabe ist eine Folge von tokenisierten Wörtern und einem \enquote{Tagset}, und die Ausgabe ist eine Folge von Tags, eines pro Token \cite*[148]{Jurafskya}. Je nach Sprache gibt es verschiedene \enquote{Tagger}, für das Deutsche gibt es das Stuttgart-Tübingen-Tagset\cite*{tagger}, einige Tags können aus der Tabelle~\ref{STTS} entnommen werden. Die Tagger wurden ursprünglich manuell erfasst und in heutiger Zeit durch das Maschinelle Lernen automatisiert.
 
 
 
@@ -58,32 +56,31 @@ Part-of-Speech Tagging ist der Prozess des Zuweisens einer Tags zu jedem Wort in
 \section{One-Hot-Encoding}
 
 
-Die verborgenen Schichten eines mehrschichtigen neuronalen Netzwerks lernen, die Eingaben des Netzwerks so darzustellen, dass die Zielausgaben leicht vorhergesagt werden können. Dies wird gut demonstriert, indem ein mehrschichtiges neuronales Netzwerk trainiert wird, um das nächste Wort in einer Sequenz aus einem lokalen Kontext früherer Wörter vorherzusagen \cite*{Bengio2003}. Jedes Wort im Kontext wird dem Netzwerk als Eins-aus-N-Vektor dargestellt, dh eine Komponente hat den Wert 1 und der Rest ist 0, dieses Verfahren wird auch als \textit{One-Hot-Encoding} bezeichnet. In einem \textit{Sprachmodell} lernen die anderen Schichten des Netzwerks, die Eingangswortvektoren in einen Ausgangswortvektor für das vorhergesagte nächste Wort umzuwandeln, welches verwendet werden kann, um die Wahrscheinlichkeit vorherzusagen, dass ein Wort im Vokabular als nächstes erscheinen wird \cite*{Lecun2015}. Das Netzwerk lernt \textbf{Wortvektoren}, die viele aktive Komponenten enthalten, von denen jede als separates Merkmal des Wortes interpretiert werden kann. Dieses Vorgehen wurde erstmals im Zusammenhang mit dem Lernen verteilter Darstellungen für Symbole demonstriert \cite*{Rumelhart1986}. Die semantischen Merkmale waren in der Eingabe nicht explizit vorhanden. Das Lernverfahren wurde als eine gute Möglichkeit entdeckt, die strukturierten Beziehungen zwischen den Eingabe- und Ausgabesymbolen in mehrere \enquote{Mikroregeln} zu zerlegen. Das Lernen von Wortvektoren hat sich auch als sehr gut erwiesen, wenn die Wortsequenzen aus einem großen Korpus von echtem Text stammen und die einzelnen Mikroregeln unzuverlässig sind \cite*{Bengio2003}.
+Die verborgenen Schichten eines mehrschichtigen neuronalen Netzwerks lernen die Eingaben des Netzwerks so darzustellen, dass die Ausgaben leicht vorhergesagt werden können. Dies wird demonstriert, indem ein mehrschichtiges neuronales Netzwerk trainiert wird, um das nächste Wort in einer Sequenz aus einem lokalen Kontext vorheriger Wörter vorherzusagen \cite*{Bengio2003}. Jedes Wort im Kontext wird dem Netzwerk als \enquote{Eins-aus-N-Vektor} dargestellt, d.h. eine Komponente hat den Wert 1 und der Rest ist 0, dieses Verfahren wird auch als \textit{One-Hot-Encoding} bezeichnet. In einem \textit{Sprachmodell} lernen die anderen Schichten des Netzwerks, die Eingangsvektoren in einen Ausgangsvektor für das vorhergesagte nächste Wort umzuwandeln, umm die Wahrscheinlichkeit vorherzusagen, dass ein Wort im Vokabular als nächstes erscheinen wird \cite*{Lecun2015}. Das Netzwerk lernt \enquote{Wortvektoren}, die viele aktive Komponenten enthalten, von denen jede als separates Merkmal des Wortes interpretiert werden kann. Dieses Vorgehen wurde erstmals im Zusammenhang mit dem Lernen verteilter Darstellungen für Symbole demonstriert \cite*{Rumelhart1986}. Die semantischen Merkmale waren in der Eingabe nicht explizit vorhanden. Das Lernverfahren wurde als eine gute Möglichkeit entdeckt, die strukturierten Beziehungen zwischen den Eingabe- und Ausgabesymbolen in mehrere \enquote{Mikroregeln} zu zerlegen. Das Lernen von Wortvektoren hat sich auch als sehr gut erwiesen, wenn die Wortsequenzen aus einem großen Korpus stammen und die einzelnen Mikroregeln unzuverlässig sind \cite*{Bengio2003}.
 
-Ein spärlicher Vektor, in dem:
-Das One-Hot-Encoding ist also ein \enquote{spärlicher Vektor} in dem ein Element auf 1 gesetzt wird und alle anderen Elemente auf 0 gesetzt werden. One-Hot-Codierung wird üblicherweise verwendet, um Zeichenfolgen oder Bezeichner mit einer endlichen Menge möglicher Werte darzustellen. 
+
+Das One-Hot-Encoding ist also ein \enquote{spärlicher Vektor} in dem ein Element auf 1 gesetzt wird und alle anderen Elemente auf 0 gesetzt werden. One-Hot-Codierung wird üblicherweise verwendet, um Zeichenfolgen mit einer endlichen Menge möglicher Werte darzustellen. 
 
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=8cm]{kapitel3/onhot.png}
-    \caption[One-Hot-Codierung als Eingabematrix]{Die Grafik zeigt wie ein Beispielkorpus welches aus 5 Sätzen besteht, in einer Matrix dargestellt werden kann. Je nach Häufigkeit wird jedes Wort im Wortschaft entsprechend den Sätzen im Korpus abgebildet. Der Korpus besteht aus 5 Sätzen (\enquote{Dies ist ein Satz mit einer Katze und einem Hund.}, \enquote{Die Katze läuft den Berg hoch.}, \enquote{Der Hund schläft noch.}, \enquote{Ein Satz mit Katze Katze Katze Katze.} und \enquote{Ein Hund.}) (eigene Darstellung).}
+    \caption[One-Hot-Encoding als Eingabematrix]{Die Grafik zeigt wie ein Beispielkorpus welches aus 5 Sätzen besteht, in einer Matrix dargestellt werden kann. Je nach Häufigkeit wird jedes Wort aus dem Wortschatz, entsprechend den Sätzen im Korpus abgebildet. Der Korpus besteht aus folgenden 5 Sätzen: \enquote{Dies ist ein Satz mit einer Katze und einem Hund.}, \enquote{Die Katze läuft den Berg hoch.}, \enquote{Der Hund schläft noch.}, \enquote{Ein Satz mit Katze Katze Katze Katze.} und \enquote{Ein Hund.}. Eigene Darstellung.}
     \label{OneHotGrafik}
 \end{figure}
 
-Die numerischen Werte sollten so viel wie möglich von der sprachlichen Bedeutung eines Wortes erfassen. Eine gut ausgewählte, informative Eingabedarstellung kann einen massiven Einfluss auf die Gesamtleistung des Modells haben. \textbf{Worteinbettungen} sind der vorherrschende Ansatz für dieses Problem und so weit verbreitet, dass ihre Verwendung praktisch in jedem NLP-Projekt angenommen wird. Unabhängig davon, ob Sie ein Projekt in den Bereichen Textklassifizierung, Sentimentanalyse oder maschinelle Übersetzung starten \cite*{Lecun2015}.
+
 
 
 
 \section{Worteinbettungen}
-Vektoren zur Darstellung von Wörtern werden im Allgemeinen als Einbettungen bezeichnet, da das Wort in einen bestimmten Vektorraum eingebettet wird \cite*[99]{Jurafskya}.
 
-Typischerweise ist eine Einbettung eine Übersetzung eines hochdimensionalen Vektors in einen niedrigdimensionalen Raum. 
+Die numerischen Werte sollten so viel wie möglich von der sprachlichen Bedeutung eines Wortes erfassen. Eine gut ausgewählte, informative Eingabedarstellung kann einen massiven Einfluss auf die Gesamtleistung des Modells haben. \textit{Worteinbettungen} sind der vorherrschende Ansatz um dieses Problem zu lösen und so weit verbreitet, dass ihre Verwendung praktisch in jedem NLP-Projekt angenommen wird. Unabhängig davon, ob es ein Projekt in den Bereichen Textklassifikation, Sentimentanalyse oder maschinelle Übersetzung ist \cite*{Lecun2015}. Vektoren zur Darstellung von Wörtern werden im Allgemeinen als Einbettungen bezeichnet, da das Wort in einen bestimmten Vektorraum eingebettet wird \cite*[99]{Jurafskya}. 
 
-Beispielsweise kann ein Satz als \enquote{spärlicher Verktor} mit Millionen Elementen (hochdimensional) dargestellt werden. Jede Zelle im Vekotor repräsentiert ein seperates Wort. Der Wer in einer Zelle gibt an, wie oft dieses Wort in einem Satz vorkommt. Da ein ein einzelner Satz wahrscheinlich nicht mehr als 50 Wörter hat, enthält fas jede Zelle eine 0. Die wenigen Zellen, die nicht 0 sind, enthalten eine kleine Zahl, welches die Häufigkeit des Auftretens dieses Wortes darstellt.
+%% fluch der dimensionalität
+Eine Einbettung eine Übersetzung eines hochdimensionalen Vektors in einen niedrigdimensionalen Raum. Beispielsweise kann ein Satz als \enquote{spärlicher Vektor} mit Millionen Elementen (hochdimensional) dargestellt werden. Jede Zelle im Vektor repräsentiert ein separates Wort. Der Wert in einer Zelle gibt an, wie oft dieses Wort in einem Satz vorkommt. Da ein ein einzelner Satz wahrscheinlich nicht mehr als 50 Wörter hat, enthält fast jede Zelle eine 0. Die wenigen Zellen, die nicht 0 sind, enthalten eine kleine Zahl, welches die Häufigkeit des Auftretens dieses Wortes darstellt. Als \enquote{dichter Vektor} mit mehreren hundert Elementen (niedrigdimensional), wird ein gegebener Satz dargestellt, indem jedes Element ein Gleitkommawert zwischen 0 und 1 erhält. Dies ist die Einbettung. Die Werte können trainiert werden und sagen mehr aus als die \enquote{spärlichen Vektoren}.
 
-Als \enquote{dichter Vektor} mit mehreren hundert Elementen (niedrigdimensional), wird der Satz dargestellt, in dem jedes Element ein Gleitkommawert zwischen 0 und 1 enthält. Dies ist also die Einbettung, diese Werte können trainiert werden und sagen mehr aus als die \enquote{spärlichen Vektoren}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=13cm]{kapitel3/embd.png}
@@ -100,17 +97,20 @@ Als \enquote{dichter Vektor} mit mehreren hundert Elementen (niedrigdimensional)
     \begin{footnotesize}
         \begin{tabular}{l l l }
             \toprule
-                           & \textbf{Worteinbettungen} & \textbf{One-Hot-Encoding} & \textbf{}\\
+                           & \textbf{One-Hot-Encoding} & \textbf{Worteinbettungen} & \textbf{}\\
         
-            \textbf{Hard-coded?} & hard-coded & gelernt: Die Einbettungsmatrix ist ein                  \\
+            \textbf{Hartkodiert} & ja & nein, gelernt: Die Einbettungsmatrix ist ein                  \\
             & & trainierbarer Gewichtsparameter. Die Werte   \\
             & & spiegeln die semantische Struktur    \\
             & & des Wortschatzes nach dem Training wider. \\
+            \\
             \textbf{Dichte}  & spärlich, die meisten Elemente                  & dicht, Elemente nehmen ständig              \\
             & sind Null, einige Eins. & wechselnde Werte an \\ 
+            \\
             \textbf{Skalierbarkeit}  & nicht skalierbar,                 & skalierbar. Die Einbettungsgröße             \\
             & Die Größe des Vektors ist proportional  & muss nicht mit der Anzahl \\ 
             & zur Größe des Vokabulars. &  der Wörter im Vokabular zunehmen. \\
+            \\
             \bottomrule
         \end{tabular}
     \end{footnotesize}
@@ -121,24 +121,22 @@ Als \enquote{dichter Vektor} mit mehreren hundert Elementen (niedrigdimensional)
 
 
 \section{Word2Vec}
-\textbf{Word2Vec} \cite*{Mikolov2013} Worteinbettungen sind Vektordarstellungen von Wörtern, die normalerweise von einem Modell gelernt werden, wenn große Textmengen als Eingabe eingegeben werden (z. B. Wikipedia, Wissenschaft, Nachrichten, Artikel usw.). Diese Darstellung von Wörtern erfasst die semantische Ähnlichkeit zwischen Wörtern unter anderen Eigenschaften. Word2Vec-Worteinbettungen werden so gelernt, dass der Abstand zwischen Vektoren für Wörter mit enger Bedeutung (z. B. \enquote{König} und \enquote{Königin}) näher ist als der Abstand für Wörter mit völlig unterschiedlichen Bedeutungen (z. B. \enquote{König} und \enquote{Katze}).
+\textit{Word2Vec} \cite*{Mikolov2013} Worteinbettungen sind Vektordarstellungen von Wörtern, die normalerweise von einem Modell gelernt werden, wenn große Textmengen als Eingabe eingegeben werden (z. B. Texte aus Wikipedia, Wissenschaft, Nachrichten, Artikel usw.). Diese Darstellung von Wörtern erfasst die semantische Ähnlichkeit zwischen Wörtern unter anderen Eigenschaften. Word2Vec-Worteinbettungen werden so gelernt, dass der Abstand zwischen Vektoren für Wörter mit enger Bedeutung (z. B. \enquote{König} und \enquote{Königin}) näher ist als der Abstand für Wörter mit völlig unterschiedlichen Bedeutungen (z. B. \enquote{König} und \enquote{Katze}).
 
-Bei der \textit{One-Hot-Codierung} sind die Wörter \enquote{gut} und \enquote{großartig}  genauso unterschiedlich wie \enquote{Tag} und \enquote{Nacht}. Hier kommt die Idee, verteilte Darstellungen zu erzeugen. Intuitiv wird eine gewisse Abhängigkeit eines Wortes von den anderen Wörtern eingeführt. Die Wörter im Kontext dieses Wortes würden einen größeren Anteil dieser Abhängigkeit erhalten. In der One-Hot Darstellung dagegen, sind alle Wörter unabhängig voneinander.
+Bei der One-Hot-Codierung sind die Wörter \enquote{gut} und \enquote{großartig} genauso unterschiedlich wie \enquote{Tag} und \enquote{Nacht}. Hier kommt die Idee, verteilte Darstellungen zu erzeugen. Intuitiv wird eine gewisse Abhängigkeit eines Wortes von den anderen Wörtern eingeführt. Die Wörter im Kontext dieses Wortes würden einen größeren Anteil dieser Abhängigkeit erhalten. In der One-Hot Darstellung dagegen, sind alle Wörter unabhängig voneinander.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=14cm]{kapitel3/wordem.png}
     \caption[Worteinbettungen erzeugen Analogien zwischen Wörtern]{Durch Worteinbettungen können interessante Analogien zwischen einzelnen Wörtern gefunden werden. (Entnommen aus \cite*{wordemdgood})}
-    \label{Word2Vex}
+    \label{Word2Vec1}
 \end{figure}
 
 
 
 \section{Word2Vec mit der Skip-Gram Architektur}
 
-Wörter können als spärliche, lange Vektoren mit vielen Dimensionen dargestellt werden. Eine alternative Methode ist die Darstellung eines Wortes mit der Verwendung von \textit{kurzen Vektoren}, mit einer Länge von 50-1000 und einer \textit{großen dichte} (die meisten Werte sind nicht Null). Es stellt sich heraus, dass dichte Vektoren in jeder NLP-Aufgabe besser funktionieren als spärliche Vektoren. Erstens können dichte Vektoren erfolgreicher als Features in maschinellen Lernsystemen aufgenommen werden.
-
-Wenn beispielsweise 100-dimensionale Worteinbettungen als Merkmale verwendet werden, kann ein Klassifikator nur 100 Gewichte lernen, um die Bedeutung des Wortes darzustellen. Wenn  stattdessen einen 50.000-dimensionalen Vektor eingeben wird, müsste ein Klassifikator Zehntausende von Gewichten für jede der spärlichen Dimensionen lernen. Zweitens können dichte Vektoren besser verallgemeinern und helfen, eine Überanpassung zu vermeiden, da sie weniger Parameter als spärliche Vektoren mit expliziten Zählungen enthalten. Schließlich können dichte Vektoren die Synonyme besser erfassen als spärliche Vektoren. Zum Beispiel sind \textit{Auto} und \textit{Automobil} Synonyme. In einer typischen spärlichen Vektordarstellung sind beide Dimensionen unterschiedliche Dimensionen. Da die Beziehung zwischen diesen beiden Dimensionen nicht modelliert wird, können spärliche Vektoren möglicherweise die Ähnlichkeit zwischen Auto und Automobil als Nachbarn nicht erfassen \cite*[110-111]{Jurafskya}.
+Wörter können als spärliche, lange Vektoren mit vielen Dimensionen dargestellt werden. Eine alternative Methode ist die Darstellung eines Wortes mit der Verwendung von kurzen Vektoren, mit einer Länge von 50-1000 und einer großen dichte (die meisten Werte sind nicht Null). Es stellt sich heraus, dass dichte Vektoren in NLP-Aufgaben bessere Ergebnisse abgeben, als spärliche Vektoren. Wenn beispielsweise 100-dimensionale Worteinbettungen als Merkmal verwendet wird, kann ein Klassifikator nur 100 Gewichte lernen, um die Bedeutung des Wortes darzustellen. Wenn  stattdessen einen 50.000-dimensionalen Vektor eingeben wird, müsste ein Klassifikator Zehntausende von Gewichten für jede der spärlichen Dimensionen lernen. Dichte Vektoren können besser verallgemeinern und helfen eine Überanpassung zu vermeiden, da sie weniger Parameter als spärliche Vektoren mit expliziten Zählungen enthalten. Schließlich können dichte Vektoren die Synonyme besser erfassen als spärliche Vektoren. Zum Beispiel sind \enquote{Auto} und \enquote{Automobil} Synonyme und können beide im gleichen Zusammenhang verwendet werden. In einer typischen spärlichen Vektordarstellung sind beide Dimensionen unterschiedliche Dimensionen. Da die Beziehung zwischen diesen beiden Dimensionen nicht modelliert wird, können spärliche Vektoren möglicherweise die Ähnlichkeit zwischen Auto und Automobil als Nachbarn nicht erfassen \cite*[110-111]{Jurafskya}.
 
 
 \begin{figure}[H]
@@ -148,17 +146,17 @@ Wenn beispielsweise 100-dimensionale Worteinbettungen als Merkmale verwendet wer
     \label{cbowskipgr}
 \end{figure}
 
-Der Skip-Gram-Algorithmus ist einer von zwei Algorithmen in einem Softwarepaket namens \textbf{word2vec} \cite*{Mikolov2013}\cite*{Mikolov}. Die Intuition von word2vec ist, dass anstatt zu zählen, wie of jedes Wort $w$ in der Nähe von einem anderen Wort vorkommt, einen Klassifikator für eine binäre Vorhersageaufgabe zu trainieren. Die erlernten Klassifikatorgewichte werden dann als Worteinbettungen genommen \cite*[111]{Jurafskya}. Dabei wird ein Zielwort $t$ mit Kandidaten aus dem Kontext \textit{c} in ein \textit{Tupel} gesetzt. \textit{P(+|t,c)} sagt dann aus, wie wahrscheinlich es ist, dass ein Kontextwort \textit{c} ein echter Kontext ist. Zum Beispiel sei gegeben der Satz \enquote{Wir essen Spaghetti zum Abendessen...}. Wenn der Kontext von $\pm 2$ Wörter betrachtet wird, und \textit{t} das Zielwort \enquote{essen} ist, wird die Klassifikation für das Tupel \textit{(essen,spaghetti)} \enquote{true} und für das Tupel \textit{(essen,auto)} \enquote{false} zurückgeben \cite*[111]{Jurafskya}.
+Der Skip-Gram-Algorithmus ist einer von zwei Algorithmen in einem Softwarepaket namens \textit{Word2Vec} \cite*{Mikolov2013}\cite*{Mikolov}. Die Intuition von Word2Vec ist, dass anstatt zu zählen, wie of jedes Wort $w$ in der Nähe von einem anderen Wort vorkommt, einen Klassifikator für eine binäre Vorhersageaufgabe zu trainieren. Die erlernten Gewichte werden dann als Worteinbettungen bezeichnet \cite*[111]{Jurafskya}. Dabei wird ein Zielwort $t$ mit Kandidaten aus dem Kontext \textit{c} in ein \textit{Tupel} gesetzt. \textit{P(+|t,c)} sagt dann aus, wie wahrscheinlich es ist, dass ein Kontextwort \textit{c} ein echter Kontext ist. Zum Beispiel sei gegeben der Satz \enquote{Wir essen Spaghetti zum Abendessen...}. Wenn der Kontext von $\pm 2$ Wörter betrachtet wird, und \textit{t} das Zielwort \enquote{essen} ist, wird die Klassifikation für das Tupel \textit{(essen,spaghetti)} \enquote{true} und für das Tupel \textit{(essen,auto)} \enquote{false} zurückgeben \cite*[111]{Jurafskya}.
 
 
-Die Ähnlichkeit eines Wortes zu einem anderen Wort, kann mittels Skalarprodukt berechnet werden. Dies ist zunächst nur eine Zahl zwischen $-\infty$ und $+\infty$. Um daraus eine Wahrscheinlichkeit zu berechnen, wird die \textit{sigmoid} Funktion $\sigma(x)$ angewendet. Die Logistikfunktion gibt eine Zahl zwischen 0 und 1 zurück. Um die Wahrscheinlichkeit zu berechnen, muss gewährleistet werden, dass die Summe \textit{c ist das Kontextwort} und \textit{c ist nicht das Kontextwort} eine 1 ergeben \cite*[112]{Jurafskya}.
+Die Ähnlichkeit eines Wortes zu einem anderen Wort, kann durch den Skalarprodukt berechnet werden. Dies ist zunächst nur eine Zahl zwischen $-\infty$ und $+\infty$. Um daraus eine Wahrscheinlichkeit zu berechnen, wird die \textit{sigmoid}-Funktion $\sigma(x)$ angewendet. Die Logistikfunktion gibt eine Zahl zwischen 0 und 1 zurück. Um die Wahrscheinlichkeit zu berechnen, muss gewährleistet werden, dass die Summe \textit{c ist das Kontextwort} und \textit{c ist nicht das Kontextwort} eine 1 ergeben \cite*[112]{Jurafskya}.
 
 \begin{equation} \label{Formel3_2}
     P(-|t,c) = 1-P(+|t,c) = \frac{e^{-t\cdot c}}{1+e^{-t\cdot c}}
 \end{equation}
 \myequations{Wahrscheinlichkeiten bei Skip-Gram}
 
-Skip-Gramm macht die starke, aber sehr nützliche vereinfachende Annahme, dass alle Kontextwörter unabhängig sind, so dass ihre Wahrscheinlichkeiten multipliziert werden können:
+Skip-Gramm macht die starke, aber sehr nützliche vereinfachende Annahme, dass alle Kontextwörter unabhängig sind, so dass ihre Wahrscheinlichkeiten multipliziert werden können \cite*[112]{Jurafskya}:
 
 \begin{equation} \label{Formel3_3}
     P(+|t,c_{1:k}) = \prod ^{k}_{i=1}\frac{1}{1+e^{-t\cdot c_{i}}}
@@ -166,7 +164,7 @@ Skip-Gramm macht die starke, aber sehr nützliche vereinfachende Annahme, dass a
 \myequations{Multiplikationen der Skip-Gram}
 
 
-Word2Vec lernt Einbettungen, indem es mit einem anfänglichen Satz von Einbettungsvektoren beginnt und dann die Einbettung jedes Wortes $w$ iterativ verschiebt, um mehr in der Nähre der Einbettungen von Wörtern zu kömmen die ähneln. Für das Training eines binären Klassifikators werden negative Beispiele nötig. Das Skip-Gram benötigt mehr negative als positive Beispiele für das Training. Das Verhältnis zwischen positiven und negativen Beispielen wird mit einem Parameter $k$ festgelegt. Für jedes der Trainingseinheiten \textit{t, c} werden \textit{k} negative Stichproben erstellt, die jeweils aus dem Ziel \textit{t} und einem \enquote{noise word} besteht. Ein \enquote{noise word} is ein zufälliges Wort aus dem Lexikon, das nicht das Zielwort \enquote{t} sein darf \cite*[113]{Jurafskya}.
+Word2Vec lernt Einbettungen, indem es mit einem anfänglichen Satz von Einbettungsvektoren beginnt und dann die Einbettung jedes Wortes $w$ iterativ verschiebt, um mehr in der Nähe der Einbettungen von Wörtern zu kommen, die ähneln. Für das Training eines binären Klasifikators sind zunächst negative Beispiele nötig. Das Skip-Gram benötigt mehr negative als positive Beispiele für das Training. Das Verhältnis zwischen positiven und negativen Beispielen wird mit einem Parameter $k$ festgelegt. Für jede Trainingseinheit \textit{t, c} werden \textit{k} negative Stichproben erstellt, die jeweils aus dem Ziel \textit{t} und einem \enquote{noise word} besteht. Ein \enquote{noise word} is ein zufälliges Wort aus dem Lexikon, das nicht das Zielwort \textit{t} sein darf \cite*[113]{Jurafskya}.
 
 Das Ziel des Lernalgorithmus besteht darin, mittels gegebenen positiven und negativen Beispielen diese Einbettungen so anzupassen, dass die Ähnlichkeit der Ziel- und Kontextwortpaare \textit{(t, c)} aus den positiven Beispielen maximiert werden und die Ähnlichkeit der Paare \textit{(t, c)} aus den negativen Beispielen minimiert wird. Formell lässt sich dieses mit folgender Formel ausdrücken:
 
@@ -181,23 +179,23 @@ Die stochastische Gradientenabstieg kann verwendet werden, um dieses Ziel zu err
 
 
 \section{CNN in der Textverarbeitung}
-Anstelle von Bildpixeln können die Eingaben für die meisten NLP-Aufgaben Sätze oder Dokumente, als eine Matrix dargestellt werden. Jede Zeile der Matrix entspricht einem Token, normalerweise einem Wort, aber es kann sich auch um ein Zeichen handeln. Das heißt, jede Zeile ist ein Vektor, der ein Wort darstellt. Typischerweise sind diese Vektoren Worteinbettungen (niedrigdimensionale Darstellungen) wie word2vec oder GloVe, aber sie können auch One-Hot-Vektoren sein, die das Wort in ein Vokabular indizieren. Für einen 10-Wort-Satz unter Verwendung einer 100-dimensionalen Einbettung hätten wir eine 10 × 100-Matrix als Eingabe \cite*{Zhang}.
+Anstelle von Bildpixeln sind die Eingaben für die meisten NLP-Aufgaben Sätze oder Dokumente, die als eine Matrix dargestellt werden können. Jede Zeile der Matrix entspricht einem Token, normalerweise einem Wort, aber es kann sich auch um ein Zeichen handeln. Das heißt, jede Zeile ist ein Vektor, welches aus Wörtern und Zeichen besteht. Typischerweise sind diese Vektoren Worteinbettungen (niedrigdimensionale Darstellungen) wie Word2Vec oder GloVe, aber sie können auch One-Hot-Vektoren sein, die das Wort in ein Vokabular indizieren \cite*{Zhang}.
 
-In der Vision \enquote{gleiten} die Filter über lokale \enquote{pathces} eines Bildes, in NLP wird jedoch der Filter über die ganze Zeilen der Matrix (Wörter) gleiten. Daher entspricht die Breite der Filter normalerweise der Breite der Eingabematrix. Die Höhe oder Regionsgröße kann variieren, aber \enquote{Schiebefenster} mit jeweils mehr als 2-5 Wörtern sind typisch. Pixel, die nahe beieinander liegen, sind wahrscheinlich semantisch verwandt (Teil desselben Objekts), aber das Gleiche gilt nicht immer für Wörter. In vielen Sprachen können Teile von Phrasen durch mehrere andere Wörter getrennt werden. Der kompositorische Aspekt ist ebenfalls nicht offensichtlich. Es ist klar, dass Wörter in gewisser Weise zusammengesetzt sind, wie ein Adjektiv, das ein Substantiv modifiziert, aber wie genau dies funktioniert, was Darstellungen auf höherer Ebene tatsächlich \enquote{bedeuten}, ist nicht so offensichtlich wie im Fall von Computer Vision. Angesichts all dessen scheinen CNNs nicht gut für NLP-Aufgaben geeignet zu sein. Wiederkehrende neuronale Netze (RNNs) sind intuitiver. Sie ähneln der Art und Weise, wie wir Sprache verarbeiten (oder zumindest wie wir denken, dass wir Sprache verarbeiten). Lesen nacheinander von links nach rechts. Glücklicherweise bedeutet dies nicht, dass CNNs nicht funktionieren. Alle Modelle sind falsch, aber einige sind nützlich. Es stellt sich heraus, dass CNNs, die auf NLP-Probleme angewendet werden, recht gut funktionieren. Ein großes Argument für CNNs ist, dass sie schnell sind. Faltungen sind ein zentraler Bestandteil der Computergrafik und werden auf Hardwareebene auf GPUs implementiert. Mit einem großen Wortschatz kann das Berechnen schnell \enquote{teuer} werden. Faltungsfilter lernen automatisch gute Darstellungen, ohne das gesamte Vokabular darstellen zu müssen \cite*{widlml}.
+In der Vision (z.B. Klassifikation von Bildern) \enquote{gleiten} die Filter über lokale \enquote{patches} eines Bildes, in NLP jedoch geleitet der Filter über die ganze Zeile der Matrix (Wörter). Daher entspricht die Breite der Filter normalerweise der Breite der Eingabematrix. Die Höhe kann variieren, aber \enquote{Schiebefenster} mit jeweils mehr als 2-5 Wörtern sind typisch. Pixel, die nahe beieinander liegen, sind wahrscheinlich verwandt (Teil desselben Objekts), aber das Gleiche gilt nicht immer für Wörter. In vielen Sprachen können Teile von Phrasen durch mehrere andere Wörter getrennt werden. Der kompositorische Aspekt ist ebenfalls nicht offensichtlich. Es ist klar, dass Wörter in gewisser Weise zusammengesetzt sind, wie ein Adjektiv, das ein Substantiv modifiziert, aber wie genau dies funktioniert, was Darstellungen auf höherer Ebene tatsächlich \enquote{bedeuten}, ist nicht so offensichtlich wie im Fall von Computer Vision. Angesichts all dessen, scheinen CNNs nicht gut für NLP-Aufgaben geeignet zu sein. Wiederkehrende neuronale Netze (RNNs) sind intuitiver. Sie ähneln der Art und Weise, wie Menschen die Sprache verarbeiten (oder zumindest wie Menschen denken, dass sie die Sprache verarbeiten). Menschen lesen nacheinander von links nach rechts. Es stellt sich aber heraus, dass CNNs, die auf NLP-Probleme angewendet werden, recht gut funktionieren. Ein großes Argument für CNNs ist, dass sie schnell sind. Faltungen sind ein zentraler Bestandteil der Computergrafik und werden auf der Hardwareebene auf GPUs implementiert. Mit einem großen Wortschatz kann das Berechnen schnell \enquote{teuer} werden. Faltungsfilter lernen automatisch gute Darstellungen, ohne das gesamte Vokabular darstellen zu müssen \cite*{widlml}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=9cm]{kapitel2/cnnnlp.png}
-    \caption[CNN in der Textverarbeitung]{Illustration einer CNN-Architektur zur Satzklassifizierung. Es sind drei Filterbereichsgrößen vorhanden: 2, 3 und 4. Filter führen Faltungen in der Satzmatrix durch und generieren Feature-Maps (mit variabler Länge). Über jede Karte wird ein 1-Max-Pooling durchgeführt, d. H. die größte Anzahl von jeder Merkmalskarte wird aufgezeichnet. Somit wird aus allen sechs Karten ein univariater Merkmalsvektor erzeugt, und diese sechs Merkmale werden verkettet, um einen Merkmalsvektor für die vorletzte Schicht zu bilden. Die letzte Softmax-Schicht empfängt dann diesen Merkmalsvektor als Eingabe und verwendet ihn zur Klassifizierung des Satzes an. Hier wird eineeine binäre Klassifikation angewendet und es gibt daher zwei mögliche Ausgangszustände dar \cite*{Zhang}.}
+    \caption[CNN in der Textverarbeitung]{Illustration einer CNN-Architektur zur Satzklassifizierung. Es sind drei Filterbereichsgrößen vorhanden: 2, 3 und 4. Filter führen Faltungen in der Satzmatrix durch und generieren Feature-Maps (mit variabler Länge). Über jede Karte wird ein 1-Max-Pooling durchgeführt, d. H. die größte Anzahl von jeder Merkmalskarte wird aufgezeichnet. Somit wird aus allen sechs Karten ein univariater Merkmalsvektor erzeugt, und diese sechs Merkmale werden verkettet, um einen Merkmalsvektor für die vorletzte Schicht zu bilden. Die letzte softmax-Schicht empfängt dann diesen Merkmalsvektor als Eingabe und verwendet ihn zur Klassifizierung des Satzes an. Hier wird eine binäre Klassifikation angewendet und es gibt daher zwei mögliche Ausgangszustände \cite*{Zhang}.}
     \label{Kap2:Pooling}
 \end{figure}
 
-Eindimensionale CNNs können für Sequenzen wie Sätze verwendet werden. Der 1D-CNN-Algorithmus beinhaltet das Gleiten eines Kernels, wo die Gleitbewegung in eine Dimension erfolgt. An jeder Gleitposition wird eine Schicht des Eingangstensors extrahiert \cite[312-313]{cai2020deep}. Angenommen ein Satz bestehe aus 9 Wörtern. Jedes Wort wird als Vektor dargestellt. Wenn ein Filter der Größe 2 vorhanden ist, gleitet dieser 8 Positionen nach unten, dieses ist der \texttt{kernel-size}. Im nächsten Schritt geschieht eine Punktproduktoperation zwischen der Eingabe und dem Kernel. Dieses ist ein linearer Prozess und wird bis zum Ende wiederholt. Statt wie bei 2-Dimensionalen CNNs geschieht die Faltung linear nach unten. 
+Eindimensionale CNNs können für Sequenzen wie Sätze verwendet werden. Der 1D-CNN-Algorithmus beinhaltet das Gleiten eines Kernels, wobei die Gleitbewegung in eine Richtung oder Dimension erfolgt. An jeder Gleitposition wird eine Schicht des Inputs extrahiert \cite[312-313]{cai2020deep}. Angenommen ein Satz besteht aus 9 Wörtern. Jedes Wort wird als Vektor dargestellt. Wenn ein Filter der Größe 2 vorhanden ist, gleitet dieser 8 Positionen nach unten, dieses ist die größe des \enquote{Kernels}. Im nächsten Schritt geschieht eine Punktprodukt Operation zwischen der Eingabe und dem Kernel. Dieses ist ein linearer Prozess und wird bis zum Ende wiederholt. 
 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=13cm]{kapitel3/1dcn.png}
-    \caption[1-Dimensionale CNN]{Darstellung der Faltungsoperation beim 1D-CNN. Entnommen aus \cite[313]{cai2020deep}}
+    \caption[1-dimensionale CNN]{Darstellung der Faltungsoperation beim 1D-CNN. Entnommen aus \cite[313]{cai2020deep}}
     \label{1dcnn}
 \end{figure}
